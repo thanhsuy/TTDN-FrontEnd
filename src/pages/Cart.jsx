@@ -15,16 +15,12 @@ const Cart = () => {
     (price, item) => price + item.qty * item.price,
     0
   );
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    // if(CartItem.length ===0) {
-    //   const storedCart = localStorage.getItem("cartItem");
-    //   setCartItem(JSON.parse(storedCart));
-    // }
-  }, []);
+  const hanldClick = () =>{
+    window.location.href = "/login";
+  };
   return (
     <section className="cart-items">
-      <Container>
+      <Container >
         <Row className="justify-content-center">
           <Col md={8}>
             {cartList.length === 0 && (

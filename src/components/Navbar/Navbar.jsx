@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Container, Nav, Navbar } from "react-bootstrap";
+import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import "./navbar.css";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -16,12 +16,13 @@ const NavBar = () => {
     }
   }
   window.addEventListener("scroll", scrollHandler);
-  // useEffect(()=> {
-  //   if(CartItem.length ===0) {
-  //     const storedCart = localStorage.getItem("cartItem");
-  //     setCartItem(JSON.parse(storedCart));
-  //   }
-  // },[])
+  const handleLogout = () => {
+    localStorage.removeItem('authToken');
+    sessionStorage.clear();
+  };
+
+  
+
   return (
     <Navbar
       fixed="top"
@@ -110,7 +111,12 @@ const NavBar = () => {
               </Link>
             </Nav.Item>
             <Nav.Item className="expanded-cart">
-              <svg
+              <Link
+                  aria-label="Go to Cart Page"
+                  to="/login"
+                  className="login"
+                >
+                <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
                 fill="black"
@@ -122,6 +128,7 @@ const NavBar = () => {
                   clipRule="evenodd"
                 />
               </svg>
+              </Link>
               <Link
                 aria-label="Go to Cart Page"
                 to="/cart"
@@ -138,6 +145,11 @@ const NavBar = () => {
                 </svg>
               </Link>
             </Nav.Item>
+            {/* LOGOUT */}
+            <Button onClick={handleLogout} className="btn btn-danger" style={{margin: '0 10px'}}> 
+                Logout
+            </Button>
+  
           </Nav>
         </Navbar.Collapse>
       </Container>

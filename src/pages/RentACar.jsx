@@ -10,7 +10,7 @@ import Section from "../components/Section";
 import { Navigate } from "react-router-dom";
 
 
-const Signin = () => {
+const RentACar = () => {
     // Khai báo trạng thái cho các trường đầu vào
     const [formData, setFormData] = useState({
         name: '',
@@ -57,7 +57,7 @@ const Signin = () => {
   
     return (
         <div className="container mb-4" style={{maxWidth: '60rem'}}>
-            <h2 className="my-4">Register Account</h2>
+            <h2 className="my-4">Rent's Information</h2>
             <form onSubmit={handleSubmit}>
                 <div className="mb-1">
                     <label className="form-label">Name</label>
@@ -112,4 +112,4 @@ const Signin = () => {
     );
   };
   
-  export default Signin;
+  export default RentACar;

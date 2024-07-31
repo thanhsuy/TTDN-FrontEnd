@@ -4,44 +4,73 @@ import Section from "../components/Section";
 import { products, discoutProducts } from "../utils/products";
 import SliderHome from "../components/Slider";
 import useWindowScrollToTop from "../hooks/useWindowScrollToTop";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   // const loadingProducts = useSelector(loadingSelector);
 
+  const [wallet, setWallet] = useState();
+  const [listBooking, setListBooking] = useState([]);
+  const [user, setUser] = useState([]);
+  const [error, setError] = useState([]);
+  const [listCar, setListCar] = useState([]);
+  const navigate = useNavigate();
   function getToken()
   {
       return localStorage.getItem("authToken");
   }
-  async function getUser() {
-    const token = getToken();
-    try {
-        const response = await fetch('http://localhost:8080/user', {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${token}`, 
-                'Content-Type': 'application/json',
-            }
-        });
-        // Kiểm tra xem phản hồi có thành công không
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
 
-        const data = await response.json();
-        return data;
+
+  const getUser = async () => {
+    console.log("getUser");
+    try {
+      const response = await fetch(`http://localhost:8080/user/myInfo`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem("authToken")}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setUser(data.result);
+      setWallet(data.result.wallet);
     } catch (error) {
-        console.error('There was a problem with the fetch operation:', error);
-        throw error; // Ném lỗi ra để xử lý ở nơi gọi hàm này nếu cần
+      console.error('Error fetching user:', error);
     }
-  }
+  };
+  const getCar = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/getlistcar`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem("authToken")}`,
+          'Content-Type': 'application/json',
+        },
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setListCar(data.result);
+    } catch (error) {
+      console.error('Error fetching car:', error);
+    }
+  };
+  useEffect(() => {
+    const resBooking = async() => {
+      await getUser();
+      await getCar();
+    };
+    resBooking();
+  }, [])
+  
+    
+
   const [cars, setCars] = useState([]);
 
-  useEffect(() => {
-    let result = getUser()
-    .then(data => {
-      setCars(data.result);
-    })
-  },[]);
 
   const newArrivalData = products.filter(
     (item) => item.category === "mobile" || item.category === "wireless"
@@ -55,7 +84,7 @@ const Home = () => {
       <Section
         title="Big Discount"
         bgColor="#f6f9fc"
-        productItems={discoutProducts}
+        productItems={listCar}
       />
       <Section
         title="New Arrivals"

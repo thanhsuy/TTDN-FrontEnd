@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
 import "./navbar.css";
-import { Link } from "react-router-dom";
+import { Link, Route, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 const NavBar = () => {
   const { cartList } = useSelector((state) => state.cart);
@@ -21,7 +21,14 @@ const NavBar = () => {
     sessionStorage.clear();
   };
 
+  const navigate = useNavigate();
+  const handleCarOwner = () => {
+    navigate("/carowner");
+  };
   
+  const handleCustomer = () =>{
+    navigate("bookinglist")
+  }
 
   return (
     <Navbar
@@ -149,7 +156,12 @@ const NavBar = () => {
             <Button onClick={handleLogout} className="btn btn-danger" style={{margin: '0 10px'}}> 
                 Logout
             </Button>
-  
+            <Button onClick={handleCarOwner} className="btn btn-primary" style={{margin: '0 10px'}}> 
+                CAR OWNER
+            </Button>
+            <Button onClick={handleCustomer} className="btn btn-success" style={{margin: '0 10px'}}> 
+                CUSTOMER
+            </Button>
           </Nav>
         </Navbar.Collapse>
       </Container>

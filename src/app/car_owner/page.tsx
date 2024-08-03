@@ -1,0 +1,49 @@
+// pages/index.tsx
+"use client";
+import Head from "next/head";
+import Navbar from "D:/TTDN/FPT/FE/ttdn-fpt/src/components/Navbarowner";
+import BenefitsSection from "D:/TTDN/FPT/FE/ttdn-fpt/src/components/BenefitsSection";
+import Footer from "D:/TTDN/FPT/FE/ttdn-fpt/src/components/Footerowner";
+import "../styles.css";
+import { getUser } from "@/components/UserInfo";
+import { useEffect, useState } from "react";
+("D:/TTDN/FPT/FE/ttdn-fpt/src/components/UserInfo");
+
+const HomePage = () => {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await getUser();
+        setUser(userData);
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  return (
+    <>
+      <Head>
+        <title>Rent-a-car</title>
+        <link rel="stylesheet" href="styles.css" />
+      </Head>
+      {user && <Navbar name={user.result.name} role={user.result.role} />}
+      <main>
+        <BenefitsSection />
+        <div className="sec-2">
+          <h1>Make money on your car right away</h1>
+          <div className="btn-list">
+            <button className="cta-button">List Your Car Today</button>
+          </div>
+        </div>
+      </main>
+      <Footer />
+    </>
+  );
+};
+
+export default HomePage;

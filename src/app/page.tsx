@@ -4,6 +4,7 @@
 import { useEffect, useState } from "react";
 import Head from "next/head";
 import Navbar from "../components/Navbar";
+import NavbarCarOwner from "../components/Navbarowner";
 import Banner from "../components/Banner";
 import WhyUs from "../components/WhyUs";
 import PeopleSay from "../components/PeopleSay";

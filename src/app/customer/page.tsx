@@ -1,12 +1,12 @@
 // pages/index.tsx
 "use client";
 import Head from "next/head";
-import Navbar from "D:/TTDN/FPT/FE/ttdn-fpt/src/components/Navbarowner";
-import Banner from "D:/TTDN/FPT/FE/ttdn-fpt/src/components/Banner";
-import WhyUs from "D:/TTDN/FPT/FE/ttdn-fpt/src/components/WhyUs";
-import PeopleSay from "D:/TTDN/FPT/FE/ttdn-fpt/src/components/PeopleSayCustomer";
-import FindUs from "D:/TTDN/FPT/FE/ttdn-fpt/src/components/FindUsCustomer";
-import Footer from "D:/TTDN/FPT/FE/ttdn-fpt/src/components/Footerowner";
+import Navbar from "../../components/Navbarowner";
+import Banner from "../../components/Banner";
+import WhyUs from "../../components/WhyUs";
+import PeopleSay from "../../components/PeopleSayCustomer";
+import FindUs from "../../components/FindUsCustomer";
+import Footer from "../../components/Footerowner";
 import "../styles.css";
 import { getUser } from "@/components/UserInfo";
 import { useEffect, useState } from "react";

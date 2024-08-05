@@ -78,3 +78,67 @@ export interface ViewCarDetailsResponse {
   termsOfUse: Termofuse;
   additionalFunctions: Additionalfunctions;
 }
+
+export interface ViewBookingListResponse {
+  idbooking: number;
+  bookingno: string;
+  startdatetime: string;
+  enddatetime: string;
+  driversinformation: string;
+  paymentmethod: string;
+  status: string;
+  carIdcar: number;
+  carIdcarowner: number;
+  userIduser: number;
+}
+
+export interface EditBookingDetailsRequest {
+  bookingno: string;
+  startdatetime: string;
+  enddatetime: string;
+  driversinformation: string;
+  paymentmethod: string;
+  status: string;
+  carIdcar: number;
+  carIdcarowner: number;
+  userIduser: number;
+}
+
+export interface TransactionResponse {
+  idtransactions: number;
+  amount: number;
+  type: string;
+  datetime: string;
+  bookingno: string;
+  carname: string;
+  note: string;
+}
+
+export interface ViewWalletResponse {
+  userId: number;
+  walletBalance: number;
+  instruction: string;
+  paymentStatus: string;
+  transactions: TransactionResponse[];
+}
+
+export interface FeedbackResponse {
+  feedbackId: number;
+  rate: number;
+  content: string;
+  datetime: string;
+  bookingId: number;
+  carId: number;
+  carOwnerId: number;
+  userId: number;
+}
+
+export interface TopUpRequest {
+  userId: number;
+  amount: number;
+}
+
+export interface WithdrawRequest {
+  userId: number;
+  amount: number;
+}

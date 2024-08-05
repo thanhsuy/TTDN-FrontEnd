@@ -30,8 +30,8 @@ const UseInfor = (role: role) => {
       <div className="dropdown-content">
         <Link href="profile">My Profile</Link>
         <Link href="#">My Cars</Link>
-        <Link href="#">My Wallet</Link>
-        <Link href="#">My Reports</Link>
+        <Link href="/viewWallet">My Wallet</Link>
+        <Link href="/viewFeedbackReport">My Reports</Link>
         <Link href="/login" onClick={Logout}>
           Logout
         </Link>
@@ -42,8 +42,8 @@ const UseInfor = (role: role) => {
     return (
       <div className="dropdown-content">
         <Link href="/profile">My Profile</Link>
-        <Link href="#">My Booking</Link>
-        <Link href="#">My Wallet</Link>
+        <Link href="/viewBookingList">My Booking</Link>
+        <Link href="/viewWallet">My Wallet</Link>
         <Link href="/login" onClick={Logout}>
           Logout
         </Link>

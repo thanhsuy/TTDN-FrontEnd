@@ -19,7 +19,7 @@ const FindUs: React.FC<FindUsProps> = ({ carData }) => {
       id="find-us"
     >
       <h2 style={{ width: "100%", height: "25px" }}>Where to find us?</h2>
-      {carData.map((item, index) => (
+      {carData?.map((item, index) => (
         <div
           key={index}
           style={{

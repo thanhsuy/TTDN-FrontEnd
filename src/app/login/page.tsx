@@ -63,6 +63,8 @@ export default function LoginForm() {
       }
 
       const data = await response.json();
+      console.log(data);
+      
 
       if (data.message === "Success") {
         const token = data.result.token;

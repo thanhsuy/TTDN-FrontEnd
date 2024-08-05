@@ -24,7 +24,7 @@ const PeopleSay: React.FC<PeopleSayProps> = ({ feedbackData }) => {
       }}
     >
       <h2 style={{ width: "100%", height: "25px" }}>What people say?</h2>
-      {feedbackData.map((item, index) => (
+      {feedbackData?.map((item, index) => (
         <div
           key={index}
           style={{

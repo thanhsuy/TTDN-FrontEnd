@@ -1,13 +1,12 @@
 // pages/index.tsx
 "use client";
 import Head from "next/head";
-import Navbar from "D:/TTDN/FPT/FE/ttdn-fpt/src/components/Navbarowner";
-import BenefitsSection from "D:/TTDN/FPT/FE/ttdn-fpt/src/components/BenefitsSection";
-import Footer from "D:/TTDN/FPT/FE/ttdn-fpt/src/components/Footerowner";
+import Navbar from "@/components/Navbarowner";
+import BenefitsSection from "@/components/BenefitsSection";
+import Footer from "@/components/Footerowner";
 import "../styles.css";
 import { getUser } from "@/components/UserInfo";
 import { useEffect, useState } from "react";
-("D:/TTDN/FPT/FE/ttdn-fpt/src/components/UserInfo");
 
 const HomePage = () => {
   const [user, setUser] = useState(null);

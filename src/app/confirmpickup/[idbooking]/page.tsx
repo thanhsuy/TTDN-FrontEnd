@@ -26,7 +26,7 @@ const ConfirmPickUp = () => {
   const [wallet, setWallet] = useState();
   const [booking, setBooking] = useState({ result: formData });
   const [user, setUser] = useState([]);
-  const [error, setError] = useState([]);
+  const [error, setError] = useState("");
   const [car, setCar] = useState([]);
 
   const getBooking = async () => {
@@ -135,7 +135,7 @@ const ConfirmPickUp = () => {
     }
   };
 
-  const handleCancel = async (event) => {
+  const handleCancel = async (event: any) => {
     event.preventDefault();
 
     try {

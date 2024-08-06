@@ -1,117 +1,15 @@
-// 'use client';
-
-// import React, { useEffect, useState } from 'react';
-// import { getWalletDetails, topUpWallet, withdrawFromWallet } from '../services/api';
-// import { ViewWalletResponse, TopUpRequest, WithdrawRequest } from '../interfaces';
-
-// const WalletPage: React.FC = () => {
-//   const [wallet, setWallet] = useState<ViewWalletResponse | null>(null);
-//   const [error, setError] = useState<string>('');
-//   const [showTopUpPopup, setShowTopUpPopup] = useState<boolean>(false);
-//   const [showWithdrawPopup, setShowWithdrawPopup] = useState<boolean>(false);
-//   const [amount, setAmount] = useState<number>(2000000); // Default amount
-
-//   useEffect(() => {
-//     const fetchData = async () => {
-//       try {
-//         const data = await getWalletDetails();
-//         setWallet(data);
-//       } catch (error) {
-//         setError('Error fetching wallet details');
-//       }
-//     };
-
-//     fetchData();
-//   }, []);
-
-//   const handleTopUp = async () => {
-//     try {
-//       const request: TopUpRequest = { userId: wallet?.userId || 0, amount };
-//       const updatedWallet = await topUpWallet(request);
-//       setWallet(updatedWallet);
-//       setShowTopUpPopup(false);
-//     } catch (error) {
-//       setError('Error topping up wallet');
-//     }
-//   };
-
-//   const handleWithdraw = async () => {
-//     try {
-//       const request: WithdrawRequest = { userId: wallet?.userId || 0, amount };
-//       const updatedWallet = await withdrawFromWallet(request);
-//       setWallet(updatedWallet);
-//       setShowWithdrawPopup(false);
-//     } catch (error) {
-//       setError('Error withdrawing from wallet');
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <h2>Wallet Details</h2>
-//       {error && <p style={{ color: 'red' }}>{error}</p>}
-//       {wallet ? (
-//         <div>
-//           <p>Wallet Balance: {wallet.walletBalance}</p>
-//           <p>Instruction: {wallet.instruction}</p>
-//           <p>Payment Status: {wallet.paymentStatus}</p>
-//           <h3>Transactions:</h3>
-//           <ul>
-//             {wallet.transactions.map((transaction) => (
-//               <li key={transaction.idtransactions}>
-//                 {transaction.datetime}: {transaction.amount} ({transaction.type}) - {transaction.bookingno} - {transaction.carname} - {transaction.note}
-//               </li>
-//             ))}
-//           </ul>
-//           <button onClick={() => setShowTopUpPopup(true)}>Nạp tiền</button>
-//           <button onClick={() => setShowWithdrawPopup(true)}>Rút tiền</button>
-//         </div>
-//       ) : (
-//         <p>Loading...</p>
-//       )}
-
-//       {showTopUpPopup && (
-//         <div className="overlay">
-//           <div className="popup">
-//             <h3>Nạp tiền</h3>
-//             <select value={amount} onChange={(e) => setAmount(parseInt(e.target.value, 10))}>
-//               <option value={2000000}>2,000,000 VND</option>
-//               <option value={5000000}>5,000,000 VND</option>
-//               <option value={10000000}>10,000,000 VND</option>
-//             </select>
-//             <button onClick={handleTopUp}>OK</button>
-//             <button onClick={() => setShowTopUpPopup(false)}>Cancel</button>
-//           </div>
-//         </div>
-//       )}
-
-//       {showWithdrawPopup && (
-//         <div className="overlay">
-//           <div className="popup">
-//             <h3>Rút tiền</h3>
-//             <select value={amount} onChange={(e) => setAmount(parseInt(e.target.value, 10))}>
-//               <option value={2000000}>2,000,000 VND</option>
-//               <option value={5000000}>5,000,000 VND</option>
-//               <option value={10000000}>10,000,000 VND</option>
-//               <option value={wallet.walletBalance}>Toàn bộ số dư</option>
-//             </select>
-//             <button onClick={handleWithdraw}>OK</button>
-//             <button onClick={() => setShowWithdrawPopup(false)}>Cancel</button>
-//           </div>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default WalletPage;
-
 'use client';
 
 import React, { useEffect, useState } from 'react';
 import { getWalletDetails, topUpWallet, withdrawFromWallet } from '../services/api';
 import { ViewWalletResponse, TopUpRequest, WithdrawRequest } from '../interfaces';
 import './wallet.css'; // Đảm bảo rằng đường dẫn này khớp với cấu trúc file của bạn
+import Head from 'next/head';
+import Footer from '@/components/Footerowner';
+import { getUser } from "@/components/UserInfo";
+import "../styles.css";
+import Navbar from "../../components/Navbarowner";
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button, Select, MenuItem } from '@mui/material';
 
 const WalletPage: React.FC = () => {
   const [wallet, setWallet] = useState<ViewWalletResponse | null>(null);
@@ -120,8 +18,22 @@ const WalletPage: React.FC = () => {
   const [withdrawAmount, setWithdrawAmount] = useState<WithdrawRequest>({ userId: 0, amount: 2000000 });
   const [showTopUpDialog, setShowTopUpDialog] = useState<boolean>(false);
   const [showWithdrawDialog, setShowWithdrawDialog] = useState<boolean>(false);
+  const [user, setUser] = useState<{ result: { name: string; role: string } } | null>(null);
+  const [fromDate, setFromDate] = useState<string>('');
+  const [toDate, setToDate] = useState<string>('');
 
   useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await getUser();
+        setUser(userData);
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    };
+
+    fetchUser();
+
     const fetchData = async () => {
       try {
         const data = await getWalletDetails();
@@ -169,65 +81,115 @@ const WalletPage: React.FC = () => {
     setWithdrawAmount({ ...withdrawAmount, amount });
   };
 
+  const handleDateFilter = () => {
+    if (wallet && fromDate && toDate) {
+      const filteredTransactions = wallet.transactions.filter(transaction => {
+        const transactionDate = new Date(transaction.datetime).toISOString().split('T')[0];
+        return transactionDate >= fromDate && transactionDate <= toDate;
+      });
+      setWallet({ ...wallet, transactions: filteredTransactions });
+    }
+  };
+
   return (
-    <div>
-      <h2>Wallet Details</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      {wallet ? (
-        <div>
-          <p>Wallet Balance: {wallet.walletBalance}</p>
-          <p>Instruction: {wallet.instruction}</p>
-          <p>Payment Status: {wallet.paymentStatus}</p>
-          <h3>Transactions:</h3>
-          <ul>
-            {wallet.transactions.map((transaction) => (
-              <li key={transaction.idtransactions}>
-                {transaction.datetime}: {transaction.amount} ({transaction.type}) - {transaction.bookingno} - {transaction.carname} - {transaction.note}
-              </li>
-            ))}
-          </ul>
-          <button onClick={() => setShowTopUpDialog(true)}>Top-Up</button>
-          <button onClick={() => setShowWithdrawDialog(true)}>Withdraw</button>
-          
-          {showTopUpDialog && (
-            <div className="dialog">
-              <h3>Top-Up Wallet</h3>
-              <select 
-                onChange={(e) => handleTopUpAmountChange(Number(e.target.value))} 
-                value={topUpAmount.amount}
-                aria-label="Select top-up amount"
-              >
-                <option value="2000000">2,000,000 VND</option>
-                <option value="5000000">5,000,000 VND</option>
-                <option value="10000000">10,000,000 VND</option>
-              </select>
-              <button onClick={handleTopUp}>OK</button>
-              <button onClick={() => setShowTopUpDialog(false)}>Cancel</button>
+    <>
+      <Head>
+        <title>Wallet Details</title>
+        <link rel="stylesheet" href="styles.css" />
+      </Head>
+      {user && <Navbar name={user.result.name} role={user.result.role} />}
+      <div className="wallet-page">
+        <h2>My Wallet</h2>
+        {error && <p style={{ color: 'red' }}>{error}</p>}
+        {wallet ? (
+          <div className="wallet-details">
+            <p className="balance-title">Your current balance:</p>
+            <p className="balance-amount">{wallet.walletBalance.toLocaleString('vi-VN')} VND</p>
+            <div className="transaction-buttons">
+              <button className="withdraw-button" onClick={() => setShowWithdrawDialog(true)}>Withdraw</button>
+              <button className="topup-button" onClick={() => setShowTopUpDialog(true)}>Top-up</button>
             </div>
-          )}
-          
-          {showWithdrawDialog && (
-            <div className="dialog">
-              <h3>Withdraw from Wallet</h3>
-              <select 
-                onChange={(e) => handleWithdrawAmountChange(Number(e.target.value))} 
-                value={withdrawAmount.amount}
-                aria-label="Select withdraw amount"
-              >
-                <option value="2000000">2,000,000 VND</option>
-                <option value="5000000">5,000,000 VND</option>
-                <option value="10000000">10,000,000 VND</option>
-                <option value={wallet.walletBalance}>All balance</option>
-              </select>
-              <button onClick={handleWithdraw}>OK</button>
-              <button onClick={() => setShowWithdrawDialog(false)}>Cancel</button>
+            <h3>Transactions</h3>
+            <div className="transaction-filter">
+              <label>From: <input type="date" value={fromDate} onChange={(e) => setFromDate(e.target.value)} /></label>
+              <label>To: <input type="date" value={toDate} onChange={(e) => setToDate(e.target.value)} /></label>
+              <button onClick={handleDateFilter}>Search</button>
             </div>
-          )}
-        </div>
-      ) : (
-        <p>Loading...</p>
-      )}
-    </div>
+            <table className="transactions-table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Amount</th>
+                  <th>Type</th>
+                  <th>Date time</th>
+                  <th>Booking No.</th>
+                  <th>Car Name</th>
+                  <th>Note</th>
+                </tr>
+              </thead>
+              <tbody>
+                {wallet.transactions.map((transaction, index) => (
+                  <tr key={transaction.idtransactions}>
+                    <td>{index + 1}</td>
+                    <td>{transaction.amount.toLocaleString('vi-VN')}</td>
+                    <td>{transaction.type}</td>
+                    <td>{new Date(transaction.datetime).toLocaleString()}</td>
+                    <td>{transaction.bookingno}</td>
+                    <td>{transaction.carname}</td>
+                    <td>{transaction.note}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p>Loading...</p>
+        )}
+      </div>
+
+      <Dialog open={showTopUpDialog} onClose={() => setShowTopUpDialog(false)}>
+        <DialogTitle>Top-Up Wallet</DialogTitle>
+        <DialogContent>
+          <p>Your current balance is {wallet?.walletBalance.toLocaleString('vi-VN')} VND</p>
+          <Select
+            value={topUpAmount.amount}
+            onChange={(e) => handleTopUpAmountChange(Number(e.target.value))}
+            fullWidth
+          >
+            <MenuItem value={2000000}>2,000,000 VND</MenuItem>
+            <MenuItem value={5000000}>5,000,000 VND</MenuItem>
+            <MenuItem value={10000000}>10,000,000 VND</MenuItem>
+          </Select>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleTopUp}>OK</Button>
+          <Button onClick={() => setShowTopUpDialog(false)}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Dialog open={showWithdrawDialog} onClose={() => setShowWithdrawDialog(false)}>
+        <DialogTitle>Withdraw from Wallet</DialogTitle>
+        <DialogContent>
+          <p>Your current balance is {wallet?.walletBalance.toLocaleString('vi-VN')} VND</p>
+          <Select
+            value={withdrawAmount.amount}
+            onChange={(e) => handleWithdrawAmountChange(Number(e.target.value))}
+            fullWidth
+          >
+            <MenuItem value={2000000}>2,000,000 VND</MenuItem>
+            <MenuItem value={5000000}>5,000,000 VND</MenuItem>
+            <MenuItem value={10000000}>10,000,000 VND</MenuItem>
+            <MenuItem value={wallet?.walletBalance}>All balance</MenuItem>
+          </Select>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleWithdraw}>OK</Button>
+          <Button onClick={() => setShowWithdrawDialog(false)}>Cancel</Button>
+        </DialogActions>
+      </Dialog>
+
+      <Footer />
+    </>
   );
 };
 

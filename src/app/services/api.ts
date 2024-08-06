@@ -149,22 +149,22 @@ export const getWalletDetails = async (): Promise<ViewWalletResponse> => {
   }
 };
 
-export const getFeedbackReport = async (): Promise<FeedbackResponse[]> => {
-  const token = localStorage.getItem('authToken');
-  if (!token) {
-    throw new Error('Token not found');
-  }
+// export const getFeedbackReport = async (): Promise<FeedbackResponse[]> => {
+//   const token = localStorage.getItem('authToken');
+//   if (!token) {
+//     throw new Error('Token not found');
+//   }
 
-  try {
-    const response = await axios.get(`${API_URL}/viewFeedbackReport`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching feedback report:', error);
-    throw error;
-  }
-};
+//   try {
+//     const response = await axios.get(`${API_URL}/viewFeedbackReport`, {
+//       headers: { Authorization: `Bearer ${token}` },
+//     });
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error fetching feedback report:', error);
+//     throw error;
+//   }
+// };
 
 export const topUpWallet = async (topUpRequest: TopUpRequest): Promise<ViewWalletResponse> => {
   const token = localStorage.getItem('authToken');
@@ -196,6 +196,46 @@ export const withdrawFromWallet = async (withdrawRequest: WithdrawRequest): Prom
     return response.data;
   } catch (error) {
     console.error('Error withdrawing from wallet:', error);
+    throw error;
+  }
+};
+
+export const searchTransactions = async (startDate: string, endDate: string): Promise<ViewWalletResponse> => {
+  const response = await axios.get('/viewWallet/search', { params: { startDate, endDate } });
+  return response.data;
+};
+
+export const getFeedbackReport = async (rate?: number): Promise<FeedbackResponse[]> => {
+  const token = localStorage.getItem('authToken');
+  if (!token) {
+    throw new Error('Token not found');
+  }
+
+  try {
+    const response = await axios.get(`${API_URL}/viewFeedbackReport`, {
+      headers: { Authorization: `Bearer ${token}` },
+      params: { rate },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching feedback report:', error);
+    throw error;
+  }
+};
+
+export const getAverageRating = async (): Promise<number> => {
+  const token = localStorage.getItem('authToken');
+  if (!token) {
+    throw new Error('Token not found');
+  }
+
+  try {
+    const response = await axios.get(`${API_URL}/viewFeedbackReport/averageRating`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching average rating:', error);
     throw error;
   }
 };

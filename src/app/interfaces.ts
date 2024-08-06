@@ -131,6 +131,10 @@ export interface FeedbackResponse {
   carId: number;
   carOwnerId: number;
   userId: number;
+  carName: string;
+  carModel: string;
+  bookingStartDate: string;
+  bookingEndDate: string;
 }
 
 export interface TopUpRequest {

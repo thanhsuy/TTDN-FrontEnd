@@ -4,9 +4,15 @@ import React, { useEffect, useState } from "react";
 import { fetchProfile, updateProfile } from "../services/api";
 import { ProfileData } from "../interfaces"; // Import từ file interfaces.ts
 import { useRouter } from "next/navigation";
+import Head from "next/head";
+import Footer from "@/components/Footerowner";
+import "../styles.css";
+import { getUser } from "@/components/UserInfo";
+import Navbar from "../../components/Navbarowner";
 
 const ProfilePage: React.FC = () => {
   const router = useRouter();
+  const [user, setUser] = useState<{ result: { name: string; role: string } } | null>(null);
   const [profileData, setProfileData] = useState<ProfileData>({
     iduser: 0, // Chuyển thành số
     name: "",
@@ -22,6 +28,17 @@ const ProfilePage: React.FC = () => {
   });
 
   useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await getUser();
+        setUser(userData);
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    };
+  
+    fetchUser();
+
     const fetchData = async () => {
       try {
         const data = await fetchProfile();
@@ -59,6 +76,12 @@ const ProfilePage: React.FC = () => {
   };
 
   return (
+    <>
+    <Head>
+      <title>Wallet Details</title>
+      <link rel="stylesheet" href="styles.css" />
+    </Head>
+    {user && <Navbar name={user.result.name} role={user.result.role} />}
     <div>
       <h2>Profile</h2>
       <form onSubmit={handleSubmit}>
@@ -175,6 +198,8 @@ const ProfilePage: React.FC = () => {
         <button type="submit">Update Profile</button>
       </form>
     </div>
+    <Footer/>
+    </>
   );
 };
 

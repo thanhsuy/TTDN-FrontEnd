@@ -3,11 +3,12 @@ import Link from "next/link";
 import { list } from "postcss";
 import { useEffect, useState } from "react";
 import { useRouter } from 'next/router';
+import { Button } from "bootstrap";
 
 const BookingCard = ({booking, car} :any) => {    
 
     const status = {
-        'Pending Deposit': 'DANG CHO THANH TOAN',
+        'Pending Deposit': 'DANG CHO CHU SO HUU XAC NHAN THANH TOAN',
         'Confirmed': 'DA DUOC CHU XE XAC NHAN THANH TOAN',
         'Pending Payment': 'DANG CHO THANH TOAN NOT HOA DON',
         'In - Progress': 'PHUONG TIEN DANG DUOC SU DUNG',
@@ -18,7 +19,7 @@ const BookingCard = ({booking, car} :any) => {
     const listMethod = {
         'Pending Deposit': 'paidDeposid',
         'Confirmed': 'confirmpickup',
-        'In - Progress': 'returncar'
+        'In - Progress': 'returncar',
     }
     const bookingMethodPost = async ( method: any, idbooking: any) => {
         try {
@@ -57,6 +58,11 @@ const BookingCard = ({booking, car} :any) => {
     const handleBack = () => {
         location.href = '/customer';
     }
+
+    const handleCancle = () => {
+        bookingMethodPost('cancelbooking', booking.idbooking);
+        location.reload();
+    }
     useEffect(() => {
 
     },[booking]);
@@ -91,9 +97,14 @@ const BookingCard = ({booking, car} :any) => {
                         <button className="col-4 btn btn-secondary" onClick={handleBack}>
                             Back
                         </button>
-                        <button className="col-4 btn btn-primary" onClick={handleClick}>
-                            {listMethod[booking.status] == 'paidDeposid' ? 'Xac nhan tra tien coc': (listMethod[booking.status] == 'confirmpickup'? 'Xac nhan lay xe' : (listMethod[booking.status] == 'returncar') ? "Xac nhan tra xe" : "Hoan thanh")}
-                        </button>
+                        {listMethod[booking.status] == "paidDeposid" && <button className="col-4 btn btn-primary" onClick={handleClick}>Xac nhan tra tien coc</button> }
+                        {listMethod[booking.status] == "returncar" && <button className="col-4 btn btn-primary" onClick={handleClick}>Xac nhan tra xe</button> }
+                        {booking.status == 'Confirmed' &&
+                        <div className="col-8">
+                            <button className="col-6 btn btn-primary" onClick={handleClick}>Xac nhan lay xe</button>
+                            <button className="col-6 btn btn-danger" onClick={handleCancle}>Huy hoa don</button>
+                        </div>
+                        }
                     </div>
                 </div>
                 }

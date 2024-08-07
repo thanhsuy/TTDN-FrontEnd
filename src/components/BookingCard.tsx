@@ -51,9 +51,35 @@ const BookingCard = ({booking, car} :any) => {
         }
     };
 
+    const BankTransfer = async (idbooking: any) => {
+        try {
+            const response = await fetch(
+              `http://localhost:8080/createbanktransfer/${idbooking}`,
+              {
+                method: "POST",
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+                  "Content-Type": "application/json",
+                }
+              }
+            );
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            const res = await response.json().then(data => location.href = data.result);
+        } catch (error) {
+            console.error("Error fetching car:", error);
+        }
+    };
+
     const handleClick = () => {
-        bookingMethodPost(listMethod[booking.status], booking.idbooking);
-        location.reload();
+        if(booking.paymentmethod == "Bank transfer" && booking.status == "Pending Deposit"){
+            BankTransfer(booking.idbooking);
+            location.href = '/customer';
+        }else{
+            bookingMethodPost(listMethod[booking.status], booking.idbooking);
+            location.reload();
+        }
     }
     const handleBack = () => {
         location.href = '/customer';

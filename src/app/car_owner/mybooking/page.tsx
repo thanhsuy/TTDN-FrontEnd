@@ -8,6 +8,7 @@ import RootLayout from "@/app/layout";
 import { useEffect, useState } from "react";
 import Car from "../mycar/car/page";
 import Booking from "./booking/page";
+import '../../styles.css'
 type UserName = {
     name: string;
     role: string;

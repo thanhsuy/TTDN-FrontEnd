@@ -1,15 +1,17 @@
 export interface ProfileData {
-  iduser: number; // Chuyển thành number
+  iduser: number;
   name: string;
   dateofbirth: string;
-  nationalidno: number; // Giữ nguyên kiểu number
+  nationalidno: number;
   phoneno: string;
   email: string;
-  address: string;
+  address?: string; // Thêm address để tương thích với dữ liệu nhận được
+  housenumber: string;
+  ward: string;
+  district: string;
+  city: string;
   drivinglicense: string;
   password: string;
-  // role: string;
-  // wallet: number; // Giữ nguyên kiểu number
 }
 
 export interface SearchCarRequest {

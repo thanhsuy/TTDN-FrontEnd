@@ -12,6 +12,7 @@ import { getUser } from "@/components/UserInfo";
 import { useEffect, useState } from "react";
 ("D:/TTDN/FPT/FE/ttdn-fpt/src/components/UserInfo");
 import SearchCarPage from "../searchCar/page";
+import ListCar from "@/components/ListCar";
 
 type CarData = [string, number];
 
@@ -80,6 +81,33 @@ const HomePage = () => {
   const [user, setUser] = useState(null);
   const [carData, setCarData] = useState<CarData[]>([]);
   const [feedbackData, setFeedbackData] = useState<FeedbackData[]>([]);
+  const [listCar, setListCar] = useState([]);
+
+  const getCar = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/getlistcar`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const data = await response.json();
+      setListCar(data.result);
+    } catch (error) {
+      console.error("Error fetching car:", error);
+    }
+  };
+
+  useEffect(() => {
+    const resBooking = async () => {
+      await getCar();
+    };
+    resBooking();
+  }, []);
 
   useEffect(() => {
     const fetchCarData = async () => {
@@ -139,6 +167,7 @@ const HomePage = () => {
       </Head>
       {user && <Navbar name={user.result.name} role={user.result.role} />}
       <SearchCarPage />
+      <ListCar listCar={listCar.filter((car) => car.status == "Available")} />
       <WhyUs sections={sections} />
       <PeopleSay feedbackData={feedbackData} />
       <FindUs carData={carData} />

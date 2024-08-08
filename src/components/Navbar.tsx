@@ -1,5 +1,6 @@
 // components/Navbar.js
 import Link from "next/link";
+import "../app/styles.css";
 
 const Navbar = () => {
   return (

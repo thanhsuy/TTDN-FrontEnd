@@ -1,6 +1,6 @@
 // api.ts
 import axios from 'axios';
-import { ProfileData, SearchCarRequest, SearchCarResponse, ViewCarDetailsResponse } from '../interfaces';
+import { EditBookingDetailsRequest, FeedbackResponse, ProfileData, SearchCarRequest, SearchCarResponse, TopUpRequest, ViewBookingListResponse, ViewCarDetailsResponse, ViewWalletResponse, WithdrawRequest } from '../interfaces';
 
 const API_URL = 'http://localhost:8080'; // Địa chỉ BE của bạn
 
@@ -77,6 +77,165 @@ export const viewCarDetails = async (id: number) => {
     return response.data;
   } catch (error) {
     console.error('Error fetching car details:', error);
+    throw error;
+  }
+};
+
+export const getBookingsForCurrentUser = async () => {
+  const token = localStorage.getItem('authToken');
+  if (!token) {
+    throw new Error('Token not found');
+  }
+
+  try {
+    const response = await axios.get<ViewBookingListResponse[]>(`${API_URL}/view-bookings`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching bookings:', error);
+    throw error;
+  }
+};
+
+export const getBookingById = async (id: number) => {
+  const token = localStorage.getItem('authToken');
+  if (!token) {
+    throw new Error('Token not found');
+  }
+
+  try {
+    const response = await axios.get<ViewBookingListResponse>(`${API_URL}/view-bookings/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching booking details:', error);
+    throw error;
+  }
+};
+
+export const updateBooking = async (id: number, bookingRequest: EditBookingDetailsRequest) => {
+  const token = localStorage.getItem('authToken');
+  if (!token) {
+    throw new Error('Token not found');
+  }
+
+  try {
+    const response = await axios.put<ViewBookingListResponse>(`${API_URL}/edit-booking/${id}`, bookingRequest, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating booking:', error);
+    throw error;
+  }
+};
+
+export const getWalletDetails = async (): Promise<ViewWalletResponse> => {
+  const token = localStorage.getItem('authToken');
+  if (!token) {
+    throw new Error('Token not found');
+  }
+
+  try {
+    const response = await axios.get(`${API_URL}/viewWallet`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching wallet details:', error);
+    throw error;
+  }
+};
+
+// export const getFeedbackReport = async (): Promise<FeedbackResponse[]> => {
+//   const token = localStorage.getItem('authToken');
+//   if (!token) {
+//     throw new Error('Token not found');
+//   }
+
+//   try {
+//     const response = await axios.get(`${API_URL}/viewFeedbackReport`, {
+//       headers: { Authorization: `Bearer ${token}` },
+//     });
+//     return response.data;
+//   } catch (error) {
+//     console.error('Error fetching feedback report:', error);
+//     throw error;
+//   }
+// };
+
+export const topUpWallet = async (topUpRequest: TopUpRequest): Promise<ViewWalletResponse> => {
+  const token = localStorage.getItem('authToken');
+  if (!token) {
+    throw new Error('Token not found');
+  }
+
+  try {
+    const response = await axios.post(`${API_URL}/viewWallet/topup`, topUpRequest, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error topping up wallet:', error);
+    throw error;
+  }
+};
+
+export const withdrawFromWallet = async (withdrawRequest: WithdrawRequest): Promise<ViewWalletResponse> => {
+  const token = localStorage.getItem('authToken');
+  if (!token) {
+    throw new Error('Token not found');
+  }
+
+  try {
+    const response = await axios.post(`${API_URL}/viewWallet/withdraw`, withdrawRequest, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error withdrawing from wallet:', error);
+    throw error;
+  }
+};
+
+export const searchTransactions = async (startDate: string, endDate: string): Promise<ViewWalletResponse> => {
+  const response = await axios.get('/viewWallet/search', { params: { startDate, endDate } });
+  return response.data;
+};
+
+export const getFeedbackReport = async (rate?: number): Promise<FeedbackResponse[]> => {
+  const token = localStorage.getItem('authToken');
+  if (!token) {
+    throw new Error('Token not found');
+  }
+
+  try {
+    const response = await axios.get(`${API_URL}/viewFeedbackReport`, {
+      headers: { Authorization: `Bearer ${token}` },
+      params: { rate },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching feedback report:', error);
+    throw error;
+  }
+};
+
+export const getAverageRating = async (): Promise<number> => {
+  const token = localStorage.getItem('authToken');
+  if (!token) {
+    throw new Error('Token not found');
+  }
+
+  try {
+    const response = await axios.get(`${API_URL}/viewFeedbackReport/averageRating`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching average rating:', error);
     throw error;
   }
 };

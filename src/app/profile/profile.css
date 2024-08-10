@@ -1,6 +1,16 @@
+
 .profile-container {
   width: 50%;
   margin: 0 auto;
+/* 
+body {
+  font-family: Arial, sans-serif;
+}
+
+.profile-container {
+  max-width: 800px;
+  margin: 20px auto; */
+
   padding: 20px;
   background: #fff;
   border-radius: 8px;
@@ -92,7 +102,6 @@
 .form-buttons button[type="button"]:hover {
   background: #5a6268;
 }
-
 .error-message {
   color: red;
   font-weight: bold;

@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import "../styles.css";
+import Navbar from "../../components/Navbar";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -104,8 +105,7 @@ export default function LoginForm() {
       if (data.message === "Success") {
         setMessage("Registration success");
         // Auto login after successful registration
-        setEmail(registerData.email);
-        setPassword(registerData.password);
+        setRegisterData(data.result);
         console.log(email);
         handleSubmit();
       } else {
@@ -119,6 +119,7 @@ export default function LoginForm() {
 
   return (
     <div>
+      <Navbar />
       {isRegister ? (
         <form onSubmit={handleRegister} className="register">
           <div>

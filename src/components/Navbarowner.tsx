@@ -29,7 +29,8 @@ const UseInfor = (role: role) => {
     return (
       <div className="dropdown-content">
         <Link href="profile">My Profile</Link>
-        <Link href="#">My Cars</Link>
+        <Link href="/car_owner/mycar">My Cars</Link>
+        <Link href="/car_owner/mybooking">My Booking</Link>
         <Link href="/viewWallet">My Wallet</Link>
         <Link href="/viewFeedbackReport">My Reports</Link>
         <Link href="/login" onClick={Logout}>

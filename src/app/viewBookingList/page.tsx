@@ -160,7 +160,8 @@ const ViewBookingList: React.FC = () => {
   }, []);
 
   const handleViewDetails = (id: number) => {
-    router.push(`/editBookingDetails/${id}`);
+    // router.push(`/editBookingDetails/${id}`);
+    router.push(`/customer/booking/book/${id}`);
   };
 
   return (
@@ -169,10 +170,18 @@ const ViewBookingList: React.FC = () => {
       <ul>
         {bookings.map((booking) => (
           <li key={booking.idbooking}>
-             {/* <h2>{booking.carname}</h2> */}
+             {/* <h2>{booking.carname}</h2>
             <h2>{booking.bookingno}</h2>
             <p>Status: {booking.status}</p>
-            <button onClick={() => handleViewDetails(booking.idbooking)}>View Details</button>
+            <button onClick={() => handleViewDetails(booking.idbooking)}>View Details</button> */}
+
+            {/* <h2>{booking.carname}</h2> */}
+            <h2>{booking.bookingno}</h2>
+            <h2>{booking.carIdcar}</h2>
+            <p>Status: {booking.status}</p>
+            <button onClick={() => handleViewDetails(booking.idbooking)}>
+              View Details
+            </button>
           </li>
         ))}
       </ul>

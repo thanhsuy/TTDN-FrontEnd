@@ -29,6 +29,10 @@ const ProfilePage: React.FC = () => {
     district: "",
     city: ""
   });
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [fieldsError, setFieldsError] = useState("");
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -77,8 +81,43 @@ const ProfilePage: React.FC = () => {
     });
   };
 
+  const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setProfileData({
+      ...profileData,
+      password: e.target.value
+    });
+  };
+
+  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setConfirmPassword(e.target.value);
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    let errors = "";
+
+    if (!profileData.password) {
+      errors += "Password is required. ";
+    }
+
+    if (!confirmPassword) {
+      errors += "Confirm Password is required. ";
+    }
+
+    if (profileData.password !== confirmPassword) {
+      setConfirmPasswordError("Passwords do not match");
+      return;
+    } else {
+      setConfirmPasswordError("");
+    }
+
+    if (errors) {
+      setFieldsError(errors);
+      return;
+    } else {
+      setFieldsError("");
+    }
+
     try {
       const updatedProfileData = {
         ...profileData,
@@ -162,6 +201,7 @@ const ProfilePage: React.FC = () => {
                 value={profileData.phoneno}
                 onChange={handleInputChange}
                 placeholder="Enter your phone number"
+                required
               />
             </div>
             <div className="form-group">
@@ -173,6 +213,7 @@ const ProfilePage: React.FC = () => {
                 value={profileData.email}
                 onChange={handleInputChange}
                 placeholder="Enter your email"
+                required
               />
             </div>
             <div className="form-group">
@@ -237,27 +278,40 @@ const ProfilePage: React.FC = () => {
           </form>
         </div>
         <div id="Security" className="tabcontent">
-          <form className="profile-form">
+          <form className="profile-form" onSubmit={handleSubmit}>
             <div className="form-group">
-              <label htmlFor="password">New Password:</label>
+              <label htmlFor="password">New Password:<span className="required">*</span></label>
               <input
                 type="password"
                 id="password"
                 name="password"
-                // value={profileData.password}
-                onChange={handleInputChange}
-                placeholder="Enter your new password"
+                value={profileData.password}
+                onChange={handlePasswordChange}
+                placeholder="Enter new password"
+                required
               />
             </div>
             <div className="form-group">
-              <label htmlFor="confirmpassword">Confirm Password:</label>
+              <label htmlFor="confirmPassword">Confirm Password:<span className="required">*</span></label>
               <input
                 type="password"
-                id="confirmpassword"
-                name="confirmpassword"
+                id="confirmPassword"
+                name="confirmPassword"
+                value={confirmPassword}
+                onChange={handleConfirmPasswordChange}
                 placeholder="Confirm your new password"
+                required
               />
             </div>
+            {passwordError && (
+              <div className="error-message">{passwordError}</div>
+            )}
+            {confirmPasswordError && (
+              <div className="error-message">{confirmPasswordError}</div>
+            )}
+            {fieldsError && (
+              <div className="error-message">{fieldsError}</div>
+            )}
             <div className="form-buttons">
               <button type="submit">Save</button>
               <button type="button" onClick={() => router.back()}>Cancel</button>
@@ -265,7 +319,7 @@ const ProfilePage: React.FC = () => {
           </form>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };

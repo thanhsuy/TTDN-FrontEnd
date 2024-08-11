@@ -105,8 +105,9 @@ export default function LoginForm() {
       if (data.message === "Success") {
         setMessage("Registration success");
         // Auto login after successful registration
-        setRegisterData(data.result);
-        console.log(email);
+        setEmail(registerData.email);
+        setPassword(registerData.password);
+        console.log(registerData.email);
         handleSubmit();
       } else {
         setMessage("Registration failed");

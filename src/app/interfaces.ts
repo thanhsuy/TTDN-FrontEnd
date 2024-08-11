@@ -146,3 +146,9 @@ export interface WithdrawRequest {
   userId: number;
   amount: number;
 }
+
+export interface SearchCarNewRequest{
+  address: string;
+  startDateTime: string; // ISO 8601 string
+  endDateTime: string;   // ISO 8601 string
+}

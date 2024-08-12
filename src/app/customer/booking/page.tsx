@@ -20,11 +20,14 @@ const Booking = () => {
         },
       });
       if (!response.ok) {
+        // console.log(response.json());
+        console.log("1");
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
       setCar(data?.result);
     } catch (error) {
+      console.log("1");
       console.error("Error fetching booking:", error);
     }
   };

@@ -155,4 +155,8 @@ export interface SearchCarNewRequest{
   address: string;
   startDateTime: string; // ISO 8601 string
   endDateTime: string;   // ISO 8601 string
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> e6120958e39fe15a819d1681d2268e5ea4bad1d8

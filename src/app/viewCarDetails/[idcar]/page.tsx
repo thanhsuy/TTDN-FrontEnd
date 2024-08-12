@@ -49,7 +49,7 @@ const ViewCarDetailsPage: React.FC = () => {
 
   return (
     <div>
-      <h1>
+      <h1 className="text-danger">
         {carDetails.car.name} ({carDetails.car.brand})
       </h1>
       <p>Model: {carDetails.car.model}</p>

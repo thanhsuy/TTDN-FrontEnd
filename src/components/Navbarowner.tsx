@@ -1,5 +1,6 @@
 // components/Navbar.tsx
 import Link from "next/link";
+import "../app/styles.css";
 import { useRouter } from "next/navigation";
 import {
   ReactElement,

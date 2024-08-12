@@ -14,12 +14,12 @@
     padding: 10px 20px;
     border: 1px solid #ccc;
     cursor: pointer;
-    background-color: #f9f9f9;
+    background-color: #93a1fd;
     margin: 0 5px;
   }
   
   .tab.active {
-    background-color: #fff;
+    background-color: #5480e7;
     border-bottom: none;
     font-weight: bold;
   }

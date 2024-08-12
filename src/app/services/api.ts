@@ -1,6 +1,6 @@
 // api.ts
 import axios from 'axios';
-import { EditBookingDetailsRequest, FeedbackResponse, ProfileData, SearchCarRequest, SearchCarResponse, TopUpRequest, ViewBookingListResponse, ViewCarDetailsResponse, ViewWalletResponse, WithdrawRequest } from '../interfaces';
+import { EditBookingDetailsRequest, FeedbackResponse, ProfileData, SearchCarRequest, SearchCarResponse, SearchCarNewRequest, TopUpRequest, ViewBookingListResponse, ViewCarDetailsResponse, ViewWalletResponse, WithdrawRequest } from '../interfaces';
 
 const API_URL = 'http://localhost:8080'; // Địa chỉ BE của bạn
 
@@ -50,6 +50,27 @@ export const searchCar = async (searchCarRequest: SearchCarRequest) => {
 
   try {
     const response = await axios.post(`${API_URL}/searchCar/new`, searchCarRequest, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json',
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error('Error searching for cars:', error);
+    throw error;
+  }
+};
+
+export const searchCarNew = async (searchCarNewRequest: SearchCarNewRequest) => {
+  const token = localStorage.getItem('authToken');
+  if (!token) {
+    throw new Error('Token not found');
+  }
+
+  try {
+    const response = await axios.post(`${API_URL}/searchCar/new`, searchCarNewRequest, {
       headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json',

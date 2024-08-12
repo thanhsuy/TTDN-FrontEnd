@@ -16,6 +16,8 @@ export interface ProfileData {
 
 export interface SearchCarRequest {
   address: string;
+  startTime: string;
+  endTime: string;
 }
 
 export interface Props {
@@ -147,4 +149,10 @@ export interface TopUpRequest {
 export interface WithdrawRequest {
   userId: number;
   amount: number;
+}
+
+export interface SearchCarNewRequest{
+  address: string;
+  startDateTime: string; // ISO 8601 string
+  endDateTime: string;   // ISO 8601 string
 }

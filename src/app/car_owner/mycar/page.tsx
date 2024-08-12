@@ -3,7 +3,7 @@ import Head from "next/head";
 import Navbar from "@/components/Navbarowner";
 import BenefitsSection from "@/components/BenefitsSection";
 import Footer from "@/components/Footerowner";
-import "../../styles.css";
+// import "../../styles.css";
 import { getUser } from "@/components/UserInfo";
 import RootLayout from "@/app/layout";
 import { useEffect, useState } from "react";

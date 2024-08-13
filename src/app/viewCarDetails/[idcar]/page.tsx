@@ -2,36 +2,65 @@
 
 import React, { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation"; 
-import { viewCarDetails } from "../../services/api"; 
+import { viewCarDetails, getCarAverageRating } from "../../services/api"; 
 import { ViewCarDetailsResponse } from "../../interfaces";
 import './viewCarDetails.css'
+import '../../styles.css'
+import Head from "next/head";
+import Footer from "@/components/Footerowner";
+import { getUser } from "@/components/UserInfo";
+import Navbar from "@/components/Navbarowner";
 
 const ViewCarDetailsPage: React.FC = () => {
   const { idcar } = useParams();
   const router = useRouter();
   const [carDetails, setCarDetails] = useState<ViewCarDetailsResponse | null>(null);
+  const [averageRating, setAverageRating] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState<{ result: { name: string; role: string } } | null>(null);
 
-  // State để quản lý tab hiện tại
   const [activeTab, setActiveTab] = useState('basic');
 
   useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await getUser();
+        setUser(userData);
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    };
+
+    fetchUser();
+
     const fetchCarDetails = async () => {
       if (idcar) {
         try {
-          const response = await viewCarDetails(Number(idcar));
-          setCarDetails(response);
+          const [carDetailsResponse, ratingResponse] = await Promise.all([
+            viewCarDetails(Number(idcar)),
+            getCarAverageRating(Number(idcar))
+          ]);
+  
+          if (carDetailsResponse?.error || ratingResponse?.error) {
+            throw new Error('API trả về lỗi');
+          }
+  
+          setCarDetails(carDetailsResponse);
+          setAverageRating(ratingResponse);
+  
         } catch (error) {
-          console.error("Error fetching car details:", error);
+          console.error("Lỗi khi fetch chi tiết xe hoặc đánh giá:", error);
+          setCarDetails(null);
+          setAverageRating(null); // xử lý trạng thái lỗi đúng cách
         } finally {
           setLoading(false);
         }
       } else {
-        console.error("idcar is null");
+        console.error("idcar là null");
         setLoading(false);
       }
     };
-
+  
     fetchCarDetails();
   }, [idcar]);
 
@@ -47,22 +76,28 @@ const ViewCarDetailsPage: React.FC = () => {
     router.push(`/customer/booking?idCar=${idcar}`);
   };
 
-  // Tách các giá trị của Additional Functions và Terms of Use
   const additionalFunctions = carDetails.additionalFunctions.namefunctions.split(', ');
   const termsOfUse = carDetails.termsOfUse.nameterms.split(', ');
 
   return (
+    <>
+    <Head>
+      <title>View Car Detail</title>
+      <link rel="stylesheet" href="styles.css" />
+    </Head>
+    {user && <Navbar name={user.result.name} role={user.result.role} />}
     <div className="container">
       <div className="row">
         <div className="col-4">
-          <p>Images: {carDetails.car.images}</p>
+          <img src={carDetails.car.images} alt="" style={{ width: "100%" }} />
         </div>
         <div className="col-4">
           <h1 className="text-danger">
             {carDetails.car.name} ({carDetails.car.brand})
           </h1>
-          <p>Rating: ⭐⭐⭐⭐⭐ (No ratings yet)</p>
-          <p>No. of rides: 0</p>
+          {/* <p>Rating: ⭐⭐⭐⭐⭐ ({averageRating !== null ? averageRating : "No ratings yet"})</p> */}
+          <p>Rating: ⭐⭐⭐⭐⭐ ({typeof averageRating === 'number' ? averageRating : "Chưa có đánh giá"})</p>
+
           <p>Price: {carDetails.car.baseprice}/day</p>
           <p>Locations: {carDetails.car.address}</p>
           <p>Status: {carDetails.car.status}</p>
@@ -70,31 +105,26 @@ const ViewCarDetailsPage: React.FC = () => {
       </div>
 
       <div className="tabs">
-        {/* Tabs navigation */}
         <button onClick={() => setActiveTab('basic')} className={activeTab === 'basic' ? 'active' : ''}>Basic Information</button>
         <button onClick={() => setActiveTab('details')} className={activeTab === 'details' ? 'active' : ''}>Additional Functions</button>
         <button onClick={() => setActiveTab('terms')} className={activeTab === 'terms' ? 'active' : ''}>Terms of Use</button>
       </div>
 
       <div className="tab-content">
-        {/* Basic Information */}
         {activeTab === 'basic' && (
           <div className="tab">
             <h2>Basic Information</h2>
-            {/* Nội dung của Basic Information */}
-            {/* Các thông tin cơ bản đã hiển thị ở trên */}
             <p>Model: {carDetails.car.model}</p>
-      <p>Color: {carDetails.car.color}</p>
-      <p>Number of seats: {carDetails.car.numberofseats}</p>
-      <p>Production years: {carDetails.car.productionyears}</p>
-      <p>Transmission type: {carDetails.car.tranmissiontype}</p>
-      <p>Fuel type: {carDetails.car.fueltype}</p>
-      <p>Status: {carDetails.car.status}</p>
-      <p>Car owner ID: {carDetails.car.idcarowner}</p>
+            <p>Color: {carDetails.car.color}</p>
+            <p>Number of seats: {carDetails.car.numberofseats}</p>
+            <p>Production years: {carDetails.car.productionyears}</p>
+            <p>Transmission type: {carDetails.car.tranmissiontype}</p>
+            <p>Fuel type: {carDetails.car.fueltype}</p>
+            <p>Status: {carDetails.car.status}</p>
+            <p>Car owner ID: {carDetails.car.idcarowner}</p>
           </div>
         )}
 
-        {/* Additional Functions */}
         {activeTab === 'details' && (
           <div className="tab">
             <h2>Additional Functions</h2>
@@ -113,7 +143,6 @@ const ViewCarDetailsPage: React.FC = () => {
           </div>
         )}
 
-        {/* Terms of Use */}
         {activeTab === 'terms' && (
           <div className="tab">
             <h2>Terms of Use</h2>
@@ -133,6 +162,8 @@ const ViewCarDetailsPage: React.FC = () => {
 
       <button onClick={handleBook}>Rent Now</button>
     </div>
+    <Footer/>
+    </>
   );
 };
 

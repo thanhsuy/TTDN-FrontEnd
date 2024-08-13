@@ -2,15 +2,6 @@
 .profile-container {
   width: 50%;
   margin: 0 auto;
-/* 
-body {
-  font-family: Arial, sans-serif;
-}
-
-.profile-container {
-  max-width: 800px;
-  margin: 20px auto; */
-
   padding: 20px;
   background: #fff;
   border-radius: 8px;
@@ -32,16 +23,19 @@ body {
   padding: 10px 20px;
   border: none;
   background: #f1f1f1;
+  color: black;
   cursor: pointer;
   transition: background 0.3s;
 }
 
 .tablinks:hover {
-  background: #ddd;
+  background: #a9a9a9;
+  color: #ffffff;
 }
 
 .tablinks.active {
-  background: #ccc;
+  background: #00568f;
+  color: white;
 }
 
 .tabcontent {

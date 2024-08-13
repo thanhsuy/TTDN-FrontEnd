@@ -285,7 +285,7 @@ const ProfilePage: React.FC = () => {
                 type="password"
                 id="password"
                 name="password"
-                value={profileData.password}
+                // value={profileData.password}
                 onChange={handlePasswordChange}
                 placeholder="Enter new password"
                 required

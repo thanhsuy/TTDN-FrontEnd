@@ -66,16 +66,16 @@ export interface Additionalfunctions {
   namefunctions: string;
 }
 
-export interface Car {
-  idcar: number;
-  make: string;
-  model: string;
-  year: number;
-  color: string;
-  pricePerDay: number;
-  status: string;
-  address: string;
-}
+// export interface Car {
+//   idcar: number;
+//   make: string;
+//   model: string;
+//   year: number;
+//   color: string;
+//   pricePerDay: number;
+//   status: string;
+//   address: string;
+// }
 
 export interface ViewCarDetailsResponse {
   car: Car;

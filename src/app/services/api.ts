@@ -261,3 +261,20 @@ export const getAverageRating = async (): Promise<number> => {
     throw error;
   }
 };
+
+export const getCarAverageRating = async (idcar: number): Promise<number> => {
+  const token = localStorage.getItem('authToken');
+  if (!token) {
+    throw new Error('Token not found');
+  }
+
+  try {
+    const response = await axios.get(`${API_URL}/viewFeedbackReport/cars/${idcar}/averageRatingByIdCar`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching car average rating:', error);
+    throw error;
+  }
+};

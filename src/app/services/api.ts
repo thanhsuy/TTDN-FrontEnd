@@ -30,7 +30,7 @@ export const fetchProfile = async () => {
 export const updateProfile = async (userId: number, profileData: ProfileData) => {
   try {
     const token = localStorage.getItem('authToken');
-    const response = await axios.put(`${API_URL}/editProfile/${userId}`, profileData, {
+    const response = await axios.put(`${API_URL}/editProfile/userinfo/${userId}`, profileData, {
       headers: {
         Authorization: `Bearer ${token}`, // Thêm token vào header
         'Content-Type': 'application/json',
@@ -39,6 +39,21 @@ export const updateProfile = async (userId: number, profileData: ProfileData) =>
     return response.data;
   } catch (error) {
     console.error('Error updating profile:', error);
+    throw error;
+  }
+};
+
+export const updateUserPassword = async (id: number, password: string) => {
+  const token = localStorage.getItem('authToken');
+  if (!token) throw new Error('Token not found');
+  
+  try {
+    const response = await axios.put(`${API_URL}/editProfile/userpass/${id}`, { password }, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error updating password:', error);
     throw error;
   }
 };

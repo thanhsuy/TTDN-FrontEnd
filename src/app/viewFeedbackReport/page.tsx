@@ -83,8 +83,9 @@ const FeedbackReportPage: React.FC = () => {
             {feedbacks.map((feedback) => (
               <li key={feedback.feedbackId} className="feedback-item">
                 <div className="user-info">
-                  <img src="/path/to/avatar.jpg" alt="User Avatar" className="avatar" />
-                  <div className="user-id">User {feedback.userId}</div>
+                  <img src="public\ImageOfCar" alt="User Avatar" className="avatar" />
+                  {/* <img src={carDetails.car.images} style={{ width: "100%" }} alt="User Avatar" className="avatar"/> */}
+                  <div className="user-id"><p>User: {feedback.userName}</p></div>
                 </div>
                 <div className="feedback-content">
                   <p>{feedback.content}</p>
@@ -96,7 +97,9 @@ const FeedbackReportPage: React.FC = () => {
                   </div>
                   <div className="car-info">
                     <div className="car-details">
-                      <div className="car-image"></div>
+                      <div className="car-image">
+                      <img src="public\ImageOfCar" alt="Car Avatar"style={{ width: "100%" }} />
+                      </div>
                       <div className="car-description">
                         <div className="car-name">{feedback.carName}</div>
                         <div className="car-dates">

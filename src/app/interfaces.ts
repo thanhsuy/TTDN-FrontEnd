@@ -137,6 +137,7 @@ export interface FeedbackResponse {
   userId: number;
   carName: string;
   carModel: string;
+  userName: string;
   bookingStartDate: string;
   bookingEndDate: string;
 }

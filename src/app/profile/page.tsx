@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { fetchProfile, updateProfile } from "../services/api";
+import { fetchProfile, updateProfile , updateUserPassword} from "../services/api";
 import { ProfileData } from "../interfaces";
 import { useRouter } from "next/navigation";
 import Head from "next/head";
@@ -92,42 +92,73 @@ const ProfilePage: React.FC = () => {
     setConfirmPassword(e.target.value);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  // const handleSubmit = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   let errors = "";
+
+  //   if (!profileData.password) {
+  //     errors += "Password is required. ";
+  //   }
+
+  //   if (!confirmPassword) {
+  //     errors += "Confirm Password is required. ";
+  //   }
+
+  //   if (profileData.password !== confirmPassword) {
+  //     setConfirmPasswordError("Passwords do not match");
+  //     return;
+  //   } else {
+  //     setConfirmPasswordError("");
+  //   }
+
+  //   if (errors) {
+  //     setFieldsError(errors);
+  //     return;
+  //   } else {
+  //     setFieldsError("");
+  //   }
+
+  //   try {
+  //     const updatedProfileData = {
+  //       ...profileData,
+  //       address: `${profileData.housenumber},${profileData.ward},${profileData.district},${profileData.city}`
+  //     };
+  //     const data = await updateProfile(profileData.iduser, updatedProfileData);
+  //     router.back();
+  //     console.log("Profile updated:", data);
+  //   } catch (error) {
+  //     console.error("Error updating profile:", error);
+  //   }
+  // };
+  const handleSubmitProfile = async (e: React.FormEvent) => {
     e.preventDefault();
-    let errors = "";
-
-    if (!profileData.password) {
-      errors += "Password is required. ";
-    }
-
-    if (!confirmPassword) {
-      errors += "Confirm Password is required. ";
-    }
-
-    if (profileData.password !== confirmPassword) {
-      setConfirmPasswordError("Passwords do not match");
-      return;
-    } else {
-      setConfirmPasswordError("");
-    }
-
-    if (errors) {
-      setFieldsError(errors);
-      return;
-    } else {
-      setFieldsError("");
-    }
-
     try {
       const updatedProfileData = {
         ...profileData,
         address: `${profileData.housenumber},${profileData.ward},${profileData.district},${profileData.city}`
       };
-      const data = await updateProfile(profileData.iduser, updatedProfileData);
-      router.back();
-      console.log("Profile updated:", data);
+      await updateProfile(profileData.iduser, updatedProfileData);
+      alert("Profile updated successfully!");
+      router.replace('/profile');  // Reload the page using router.replace
     } catch (error) {
       console.error("Error updating profile:", error);
+    }
+  };
+
+  const handleSubmitPassword = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (profileData.password !== confirmPassword) {
+      setConfirmPasswordError("Passwords do not match");
+      return;
+    }
+
+    try {
+      await updateUserPassword(profileData.iduser, confirmPassword);
+      console.log(confirmPassword);
+      alert("Password updated successfully!");
+      router.replace('/profile');  // Reload the page using router.replace
+    } catch (error) {
+      console.error("Error updating password:", error);
     }
   };
 
@@ -159,7 +190,7 @@ const ProfilePage: React.FC = () => {
           <button className="tablinks" onClick={(e) => openTab(e, 'Security')}>Security</button>
         </div>
         <div id="PersonalInfo" className="tabcontent">
-          <form className="profile-form" onSubmit={handleSubmit}>
+          <form className="profile-form" onSubmit={handleSubmitProfile}>
             <div className="form-group">
               <label htmlFor="name">Full Name:</label>
               <input
@@ -278,7 +309,7 @@ const ProfilePage: React.FC = () => {
           </form>
         </div>
         <div id="Security" className="tabcontent">
-          <form className="profile-form" onSubmit={handleSubmit}>
+          <form className="profile-form" onSubmit={handleSubmitPassword}>
             <div className="form-group">
               <label htmlFor="password">New Password:<span className="required">*</span></label>
               <input

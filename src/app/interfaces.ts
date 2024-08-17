@@ -92,6 +92,7 @@ export interface ViewBookingListResponse {
   paymentmethod: string;
   status: string;
   carIdcar: number;
+  carImage:string;
   carIdcarowner: number;
   userIduser: number;
 }
@@ -137,6 +138,7 @@ export interface FeedbackResponse {
   userId: number;
   carName: string;
   carModel: string;
+  carImage: string;
   userName: string;
   bookingStartDate: string;
   bookingEndDate: string;

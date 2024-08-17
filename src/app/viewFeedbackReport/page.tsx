@@ -9,6 +9,7 @@ import Footer from '@/components/Footerowner';
 import { getUser } from "@/components/UserInfo";
 import Navbar from "../../components/Navbarowner";
 import "../styles.css";
+import Car from '../car_owner/mycar/car/page';
 
 const FeedbackReportPage: React.FC = () => {
   const [feedbacks, setFeedbacks] = useState<FeedbackResponse[]>([]);
@@ -83,8 +84,7 @@ const FeedbackReportPage: React.FC = () => {
             {feedbacks.map((feedback) => (
               <li key={feedback.feedbackId} className="feedback-item">
                 <div className="user-info">
-                  <img src="public\ImageOfCar" alt="User Avatar" className="avatar" />
-                  {/* <img src={carDetails.car.images} style={{ width: "100%" }} alt="User Avatar" className="avatar"/> */}
+                  {/* <img src="public\ImageOfCar" alt="User Avatar" className="avatar" /> */}
                   <div className="user-id"><p>User: {feedback.userName}</p></div>
                 </div>
                 <div className="feedback-content">
@@ -98,13 +98,13 @@ const FeedbackReportPage: React.FC = () => {
                   <div className="car-info">
                     <div className="car-details">
                       <div className="car-image">
-                      <img src="public\ImageOfCar" alt="Car Avatar"style={{ width: "100%" }} />
+                      <img src={feedback.carImage} alt="Car Avatar"style={{ width: "100%" }} />
                       </div>
                       <div className="car-description">
                         <div className="car-name">{feedback.carName}</div>
                         <div className="car-dates">
-                          From: {feedback.bookingStartDate} <br />
-                          To: {feedback.bookingEndDate}
+                          From: {new Date(feedback.bookingStartDate).toLocaleString()} <br />
+                          To: {new Date(feedback.bookingEndDate).toLocaleString()}
                         </div>
                       </div>
                     </div>

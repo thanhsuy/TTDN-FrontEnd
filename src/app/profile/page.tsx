@@ -224,7 +224,7 @@ const ProfilePage: React.FC = () => {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="phoneno">Phone No:</label>
+              <label htmlFor="phoneno">Phone No:<span className="required">*</span></label>
               <input
                 type="text"
                 id="phoneno"
@@ -236,7 +236,7 @@ const ProfilePage: React.FC = () => {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="email">Email:</label>
+              <label htmlFor="email">Email:<span className="required">*</span></label>
               <input
                 type="email"
                 id="email"

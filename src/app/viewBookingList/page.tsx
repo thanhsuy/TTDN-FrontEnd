@@ -1,152 +1,33 @@
-// import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
-
-// const ViewBookings = () => {
-//   const [bookings, setBookings] = useState([]);
-//   const [selectedBooking, setSelectedBooking] = useState(null);
-//   const userEmail = "user@example.com"; // Sử dụng email của user đang đăng nhập
-//   const [role, setRole] = useState("");
-
-//   useEffect(() => {
-//     const fetchUserRole = async () => {
-//       try {
-//         const response = await axios.get(`/user-role?email=${userEmail}`);
-//         setRole(response.data.role);
-//       } catch (error) {
-//         console.error('Error fetching user role:', error);
-//       }
-//     };
-
-//     fetchUserRole();
-//   }, [userEmail]);
-
-//   useEffect(() => {
-//     if (role === "CUSTOMER") {
-//       const fetchBookings = async () => {
-//         try {
-//           const response = await axios.get(`/view-bookings?email=${userEmail}`);
-//           setBookings(response.data);
-//         } catch (error) {
-//           console.error('Error fetching bookings:', error);
-//         }
-//       };
-
-//       fetchBookings();
-//     }
-//   }, [userEmail, role]);
-
-//   const handleViewDetails = (booking) => {
-//     setSelectedBooking(booking);
-//   };
-
-//   return (
-//     <div>
-//       <h1>My Bookings</h1>
-//       {role === "CUSTOMER" ? (
-//         <>
-//           <ul>
-//             {bookings.map((booking) => (
-//               <li key={booking.idbooking}>
-//                 <h2>{booking.carname}</h2>
-//                 <p>Booking No: {booking.bookingno}</p>
-//                 <p>Status: {booking.status}</p>
-//                 <button onClick={() => handleViewDetails(booking)}>View Details</button>
-//               </li>
-//             ))}
-//           </ul>
-//           {selectedBooking && (
-//             <BookingDetails booking={selectedBooking} onClose={() => setSelectedBooking(null)} userEmail={userEmail} />
-//           )}
-//         </>
-//       ) : (
-//         <p>You do not have permission to view bookings.</p>
-//       )}
-//     </div>
-//   );
-// };
-
-// const BookingDetails = ({ booking, onClose, userEmail }) => {
-//   const [details, setDetails] = useState(booking);
-
-//   const handleChange = (e) => {
-//     const { name, value } = e.target;
-//     setDetails((prevDetails) => ({
-//       ...prevDetails,
-//       [name]: value,
-//     }));
-//   };
-
-//   const handleSave = async () => {
-//     try {
-//       await axios.put(`/edit-booking/${details.idbooking}?email=${userEmail}`, details);
-//       alert('Booking updated successfully');
-//       onClose();
-//     } catch (error) {
-//       console.error('Error updating booking:', error);
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <h2>Booking Details</h2>
-//       <form>
-//         <div>
-//           <label>Booking No</label>
-//           <input name="bookingno" value={details.bookingno} onChange={handleChange} />
-//         </div>
-//         <div>
-//           <label>Start Date</label>
-//           <input name="startdatetime" value={details.startdatetime} onChange={handleChange} />
-//         </div>
-//         <div>
-//           <label>End Date</label>
-//           <input name="enddatetime" value={details.enddatetime} onChange={handleChange} />
-//         </div>
-//         <div>
-//           <label>Driver's Information</label>
-//           <input name="driversinformation" value={details.driversinformation} onChange={handleChange} />
-//         </div>
-//         <div>
-//           <label>Payment Method</label>
-//           <input name="paymentmethod" value={details.paymentmethod} onChange={handleChange} />
-//         </div>
-//         <div>
-//           <label>Status</label>
-//           <input name="status" value={details.status} onChange={handleChange} />
-//         </div>
-//         <div>
-//           <label>Car ID</label>
-//           <input name="carIdcar" value={details.carIdcar} onChange={handleChange} />
-//         </div>
-//         <div>
-//           <label>Car Owner ID</label>
-//           <input name="carIdcarowner" value={details.carIdcarowner} onChange={handleChange} />
-//         </div>
-//         <div>
-//           <label>User ID</label>
-//           <input name="userIduser" value={details.userIduser} onChange={handleChange} />
-//         </div>
-//         <button type="button" onClick={handleSave}>Save</button>
-//         <button type="button" onClick={onClose}>Close</button>
-//       </form>
-//     </div>
-//   );
-// };
-
-// export default ViewBookings;
-
 'use client';
 
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getBookingsForCurrentUser } from '../services/api';
 import { ViewBookingListResponse } from '../interfaces';
+import './viewBookingList.css'; // Assuming you have a styles.css file for custom styling
+import Head from 'next/head';
+import Footer from '@/components/Footerowner';
+import { getUser } from "@/components/UserInfo";
+import Navbar from "../../components/Navbarowner";
+import "../styles.css";
 
 const ViewBookingList: React.FC = () => {
   const [bookings, setBookings] = useState<ViewBookingListResponse[]>([]);
+  const [user, setUser] = useState<{ result: { name: string; role: string } } | null>(null);
   const router = useRouter();
 
   useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const userData = await getUser();
+        setUser(userData);
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    };
+
+    fetchUser();
+
     const fetchBookings = async () => {
       try {
         const data = await getBookingsForCurrentUser();
@@ -160,33 +41,69 @@ const ViewBookingList: React.FC = () => {
   }, []);
 
   const handleViewDetails = (id: number) => {
-    // router.push(`/editBookingDetails/${id}`);
     router.push(`/customer/booking/book/${id}`);
   };
 
   return (
-    <div>
+    <>
+    <Head>
+      <title>Wallet Details</title>
+      <link rel="stylesheet" href="styles.css" />
+    </Head>
+    {user && <Navbar name={user.result.name} role={user.result.role} />}
+    <div className="booking-list-container">
       <h1>My Bookings</h1>
-      <ul>
+      <p>You have {bookings.length} ongoing bookings</p>
+      <ul className="booking-list">
         {bookings.map((booking) => (
-          <li key={booking.idbooking}>
-             {/* <h2>{booking.carname}</h2>
-            <h2>{booking.bookingno}</h2>
-            <p>Status: {booking.status}</p>
-            <button onClick={() => handleViewDetails(booking.idbooking)}>View Details</button> */}
-
-            {/* <h2>{booking.carname}</h2> */}
-            <h2>{booking.bookingno}</h2>
-            <h2>{booking.carIdcar}</h2>
-            <p>Status: {booking.status}</p>
-            <button onClick={() => handleViewDetails(booking.idbooking)}>
-              View Details
-            </button>
+          <li key={booking.idbooking} className="booking-item">
+            <div className="booking-image-container">
+              {/* Placeholder for car image */}
+              <img src={booking.carImage} alt="Car Image" className="car-image" />
+            </div>
+            <div className="booking-details">
+              <h2 className="car-name">Nissan Navara EL 2017</h2> {/* Replace with dynamic car name */}
+              <p className="booking-date">
+                From: {booking.startdatetime} - To: {booking.enddatetime}
+              </p>
+              <p className="booking-status">Booking Status: <span className={getStatusClass(booking.status)}>{booking.status}</span></p>
+              <p className="booking-number">Booking No.: {booking.bookingno}</p>
+            </div>
+            <div className="booking-actions">
+              <button className="view-details-btn" onClick={() => handleViewDetails(booking.idbooking)}>View Details</button>
+              {booking.status === "Pending deposit" && (
+                <button className="cancel-booking-btn">Cancel Booking</button>
+              )}
+              {booking.status === "Confirmed" && (
+                <button className="update-info-btn">Update Pickup Info</button>
+              )}
+            </div>
           </li>
         ))}
       </ul>
     </div>
+    <Footer />
+    </>
   );
 };
 
 export default ViewBookingList;
+
+// Helper function to return status class
+const getStatusClass = (status: string) => {
+  switch (status.toLowerCase()) {
+    case 'confirmed':
+      return 'status-confirmed';
+    case 'pending deposit':
+      return 'status-pending-deposit';
+    case 'completed':
+      return 'status-completed';
+    case 'cancelled':
+      return 'status-cancelled';
+    case 'pending payment':
+      return 'status-pending-payment';
+    default:
+      return '';
+  }
+};
+

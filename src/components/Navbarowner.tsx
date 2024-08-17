@@ -2,14 +2,7 @@
 import Link from "next/link";
 import "../app/styles.css";
 import { useRouter } from "next/navigation";
-import {
-  ReactElement,
-  JSXElementConstructor,
-  ReactNode,
-  ReactPortal,
-  AwaitedReactNode,
-  useEffect,
-} from "react";
+import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, AwaitedReactNode, useEffect } from "react";
 
 type UserName = {
   name: string;
@@ -25,6 +18,7 @@ const UseInfor = (role: role) => {
     localStorage.removeItem("authToken");
     return <div>Logging out...</div>;
   };
+  const router = useRouter();
 
   if (role.role === "CAROWNER") {
     return (
@@ -64,10 +58,22 @@ const UseInfor = (role: role) => {
 };
 
 const Navbar = (name: UserName) => {
+  const router = useRouter();
+
+  const handleClick = () => {
+    if (name.role === "CAROWNER") {
+      router.push("/car_owner");
+    } else if (name.role === "CUSTOMER") {
+      router.push("/customer");
+    } else {
+      router.push("/");
+    }
+  };
+
   return (
     <header>
       <div className="header-container">
-        <div className="icon">
+        <div className="icon" onClick={handleClick} style={{ cursor: "pointer" }}>
           <img src="/icon/vehicle.png" alt="Car Icon" className="car-icon" />
           <h1>Rent a car today!</h1>
         </div>
@@ -81,23 +87,11 @@ const Navbar = (name: UserName) => {
             <ul>
               <li className="dropdown">
                 <div className="dr-ic">
-                  <img
-                    src="/icon/user-icon.png"
-                    alt="User Icon"
-                    className="us-icon"
-                  />
-                  <Link
-                    href="#"
-                    style={{ paddingTop: "10px" }}
-                    className="dropbtn"
-                  >
+                  <img src="/icon/user-icon.png" alt="User Icon" className="us-icon" />
+                  <Link href="#" style={{ paddingTop: "10px" }} className="dropbtn">
                     Welcome, {name.name}
                   </Link>
-                  <img
-                    src="/icon/down-arrow.png"
-                    alt="Drop-Icon"
-                    className="drop-icon"
-                  />
+                  <img src="/icon/down-arrow.png" alt="Drop-Icon" className="drop-icon" />
                 </div>
                 <UseInfor role={name.role} />
               </li>

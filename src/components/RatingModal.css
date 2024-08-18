@@ -1,0 +1,48 @@
+/* RatingModal.css */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Darkens the background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Ensure it’s on top of other content */
+  }
+  
+  .modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Adds a subtle shadow */
+  }
+  
+  .review-textarea {
+    width: 100%;
+    height: 80px;
+    margin-bottom: 10px;
+  }
+  
+  .modal-buttons {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .stars {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .star {
+    cursor: pointer;
+    color: #ccc; /* Default star color */
+  }
+  
+  .star.selected {
+    color: gold; /* Color for selected stars */
+  }

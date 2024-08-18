@@ -120,7 +120,7 @@
 //             </div>
 
 //             <div className="row d-flex justify-content-around">
-              
+
 //               {listMethod[booking.status] == "paidDeposid" && (
 //                 <>
 //                 <button className="col-5 btn btn-secondary" onClick={handleBack}>
@@ -176,8 +176,10 @@ import { list } from "postcss";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { Button } from "bootstrap";
+import RatingModal from "./RatingModel";
 
 const BookingCard = ({ booking, car }: any) => {
+  const [showModal, setShowModal] = useState(false);
   const status = {
     "Pending Deposit": "DANG CHO CHU SO HUU XAC NHAN THANH TOAN",
     "Confirmed": "DA DUOC CHU XE XAC NHAN THANH TOAN",
@@ -191,7 +193,7 @@ const BookingCard = ({ booking, car }: any) => {
     "Pending Deposit": "paidDeposid",
     "Confirmed": "confirmpickup",
     "In - Progress": "returncar",
-    "Pending Payment": "returncar"
+    "Pending Payment": "returncar",
   };
   const bookingMethodPost = async (method: any, idbooking: any) => {
     try {
@@ -213,7 +215,7 @@ const BookingCard = ({ booking, car }: any) => {
         }
       );
       if (!response.ok) {
-        response.json().then(data => alert(data.message));      
+        response.json().then((data) => alert(data.message));
       }
       const data = await response.json();
       return data;
@@ -265,11 +267,22 @@ const BookingCard = ({ booking, car }: any) => {
     bookingMethodPost("cancelbooking", booking.idbooking);
     location.reload();
   };
+
+  const handleReport = () => {
+    setShowModal(true);
+  };
+
+  const handleClose = () => {
+    setShowModal(false);
+  };
+
   useEffect(() => {}, [booking]);
+  console.log(booking.status);
   return (
     <div className="container d-flex pt-4 border-0 m-0">
       <div className="row d-flex align-items-center">
-        <div className="col-5">{car && <img src={car.images} alt="" style={{ width: "100%" }} />}
+        <div className="col-5">
+          {car && <img src={car.images} alt="" style={{ width: "100%" }} />}
         </div>
         {car && booking && (
           <div className="col-6">
@@ -292,31 +305,45 @@ const BookingCard = ({ booking, car }: any) => {
             </div>
 
             <div className="row d-flex justify-content-around">
-              
               {listMethod[booking.status] == "paidDeposid" && (
                 <>
-                <button className="col-5 btn btn-secondary" onClick={handleBack}>
-                  Back
-                </button>
-                <button className="col-5 btn btn-primary" onClick={handleClick}>
-                  Xac nhan tra tien
-                </button>
+                  <button
+                    className="col-5 btn btn-secondary"
+                    onClick={handleBack}
+                  >
+                    Back
+                  </button>
+                  <button
+                    className="col-5 btn btn-primary"
+                    onClick={handleClick}
+                  >
+                    Xac nhan tra tien
+                  </button>
                 </>
               )}
               {listMethod[booking.status] == "returncar" && (
                 <>
-                <button className="col-5 btn btn-secondary" onClick={handleBack}>
-                  Back
-                </button>
-                <button className="col-5 btn btn-primary" onClick={handleClick}>
-                  Xac nhan tra xe
-                </button>
+                  <button
+                    className="col-5 btn btn-secondary"
+                    onClick={handleBack}
+                  >
+                    Back
+                  </button>
+                  <button
+                    className="col-5 btn btn-primary"
+                    onClick={handleClick}
+                  >
+                    Xac nhan tra xe
+                  </button>
                 </>
               )}
               {booking.status == "Confirmed" && (
                 <div className="row d-flex justify-content-between">
-                  <button className="col-3 btn btn-secondary" onClick={handleBack}>
-                  Back
+                  <button
+                    className="col-3 btn btn-secondary"
+                    onClick={handleBack}
+                  >
+                    Back
                   </button>
                   <button
                     className="col-3 btn btn-primary"
@@ -330,6 +357,17 @@ const BookingCard = ({ booking, car }: any) => {
                   >
                     Huy
                   </button>
+                </div>
+              )}
+              {status[booking.status] == "Completed" && (
+                <div className="row d-flex justify-content-between">
+                  <button
+                    className="col-5 btn btn-danger"
+                    onClick={handleReport}
+                  >
+                    Report
+                  </button>
+                  {showModal && <RatingModal onClose={handleClose} bookingid={booking.idbooking} />}
                 </div>
               )}
             </div>

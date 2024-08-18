@@ -9,10 +9,7 @@ import Footer from '@/components/Footerowner';
 import { getUser } from "@/components/UserInfo";
 import Navbar from "../../components/Navbarowner";
 import "../styles.css";
-<<<<<<< HEAD
 import Car from '../car_owner/mycar/car/page';
-=======
->>>>>>> 3e42a36f006cb7135cf513594c020c017b5a4482
 
 const FeedbackReportPage: React.FC = () => {
   const [feedbacks, setFeedbacks] = useState<FeedbackResponse[]>([]);
@@ -87,13 +84,8 @@ const FeedbackReportPage: React.FC = () => {
             {feedbacks.map((feedback) => (
               <li key={feedback.feedbackId} className="feedback-item">
                 <div className="user-info">
-<<<<<<< HEAD
                   {/* <img src="public\ImageOfCar" alt="User Avatar" className="avatar" /> */}
                   <div className="user-id"><p>User: {feedback.userName}</p></div>
-=======
-                  <img src="/path/to/avatar.jpg" alt="User Avatar" className="avatar" />
-                  <div className="user-id">User {feedback.userId}</div>
->>>>>>> 3e42a36f006cb7135cf513594c020c017b5a4482
                 </div>
                 <div className="feedback-content">
                   <p>{feedback.content}</p>
@@ -105,7 +97,6 @@ const FeedbackReportPage: React.FC = () => {
                   </div>
                   <div className="car-info">
                     <div className="car-details">
-<<<<<<< HEAD
                       <div className="car-image">
                       <img src={feedback.carImage} alt="Car Avatar"style={{ width: "100%" }} />
                       </div>
@@ -114,14 +105,6 @@ const FeedbackReportPage: React.FC = () => {
                         <div className="car-dates">
                           From: {new Date(feedback.bookingStartDate).toLocaleString()} <br />
                           To: {new Date(feedback.bookingEndDate).toLocaleString()}
-=======
-                      <div className="car-image"></div>
-                      <div className="car-description">
-                        <div className="car-name">{feedback.carName}</div>
-                        <div className="car-dates">
-                          From: {feedback.bookingStartDate} <br />
-                          To: {feedback.bookingEndDate}
->>>>>>> 3e42a36f006cb7135cf513594c020c017b5a4482
                         </div>
                       </div>
                     </div>

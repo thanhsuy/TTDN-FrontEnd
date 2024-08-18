@@ -1,0 +1,64 @@
+.search-results-container {
+    padding: 20px;
+  }
+  
+  .car-result-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    padding: 20px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .car-result-card:hover {
+    background-color: #f9f9f9;
+  }
+  
+  .car-image-placeholder img {
+    width: 150px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  
+  .car-info {
+    flex: 1;
+    margin-left: 20px;
+  }
+  
+  .car-info h2 {
+    margin-bottom: 10px;
+    font-size: 20px;
+  }
+  
+  .car-info p {
+    margin: 5px 0;
+  }
+  
+  .car-actions {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .car-actions button {
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .car-actions button:hover {
+    background-color: #0056b3;
+  }
+  
+  .car-actions button:last-child {
+    margin-bottom: 0;
+  }
+  

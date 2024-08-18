@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-<<<<<<< HEAD
 import { useParams, useRouter } from "next/navigation"; 
 import { viewCarDetails, getCarAverageRating } from "../../services/api"; 
 import { ViewCarDetailsResponse } from "../../interfaces";
@@ -53,47 +52,14 @@ const ViewCarDetailsPage: React.FC = () => {
           console.error("Lỗi khi fetch chi tiết xe hoặc đánh giá:", error);
           setCarDetails(null);
           setAverageRating(null); // xử lý trạng thái lỗi đúng cách
-=======
-import { useParams, useRouter } from "next/navigation"; // Đảm bảo bạn đã cài đặt đúng thư viện
-import { viewCarDetails } from "../../services/api"; // Đảm bảo đường dẫn đúng
-import { ViewCarDetailsResponse } from "../../interfaces";
-
-const ViewCarDetailsPage: React.FC = () => {
-  const { idcar } = useParams(); // Lấy idcar từ URL query parameter
-  const router = useRouter();
-  const [carDetails, setCarDetails] = useState<ViewCarDetailsResponse | null>(
-    null
-  );
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchCarDetails = async () => {
-      if (idcar) {
-        console.log("Fetching car details for idcar:", idcar); // Log giá trị idcar
-        try {
-          const response = await viewCarDetails(Number(idcar));
-          console.log("API response:", response); // Log kết quả từ API
-          setCarDetails(response);
-        } catch (error) {
-          console.error("Error fetching car details:", error);
->>>>>>> 3e42a36f006cb7135cf513594c020c017b5a4482
         } finally {
           setLoading(false);
         }
       } else {
-<<<<<<< HEAD
-        console.error("idcar là null");
-        setLoading(false);
-      }
-    };
-  
-=======
         console.error("idcar is null");
         setLoading(false);
       }
     };
-
->>>>>>> 3e42a36f006cb7135cf513594c020c017b5a4482
     fetchCarDetails();
   }, [idcar]);
 
@@ -109,7 +75,6 @@ const ViewCarDetailsPage: React.FC = () => {
     router.push(`/customer/booking?idCar=${idcar}`);
   };
 
-<<<<<<< HEAD
   const additionalFunctions = carDetails.additionalFunctions.namefunctions.split(', ');
   const termsOfUse = carDetails.termsOfUse.nameterms.split(', ');
 
@@ -198,34 +163,6 @@ const ViewCarDetailsPage: React.FC = () => {
     </div>
     <Footer/>
     </>
-=======
-  return (
-    <div>
-      <h1 className="text-danger">
-        {carDetails.car.name} ({carDetails.car.brand})
-      </h1>
-      <p>Model: {carDetails.car.model}</p>
-      <p>Color: {carDetails.car.color}</p>
-      <p>Number of seats: {carDetails.car.numberofseats}</p>
-      <p>Production years: {carDetails.car.productionyears}</p>
-      <p>Transmission type: {carDetails.car.tranmissiontype}</p>
-      <p>Fuel type: {carDetails.car.fueltype}</p>
-      <p>Mileage: {carDetails.car.mileage}</p>
-      <p>Fuel consumption: {carDetails.car.fuelconsumption}</p>
-      <p>Base price: {carDetails.car.baseprice}</p>
-      <p>Deposite: {carDetails.car.deposite}</p>
-      <p>Address: {carDetails.car.address}</p>
-      <p>Description: {carDetails.car.descripton}</p>
-      <p>Images: {carDetails.car.images}</p>
-      <p>Status: {carDetails.car.status}</p>
-      <p>Car owner ID: {carDetails.car.idcarowner}</p>
-      <p>Terms of Use: {carDetails.termsOfUse.nameterms}</p>
-      <p>
-        Additional Functions: {carDetails.additionalFunctions.namefunctions}
-      </p>
-      <button onClick={handleBook}>Rent Now</button>
-    </div>
->>>>>>> 3e42a36f006cb7135cf513594c020c017b5a4482
   );
 };
 

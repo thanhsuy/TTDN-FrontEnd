@@ -1,21 +1,12 @@
 // pages/index.tsx
 "use client";
 import Head from "next/head";
-<<<<<<< HEAD
-import Navbar from "../../components/Navbarowner";
-import Banner from "../../components/Banner";
-import WhyUs from "../../components/WhyUs";
-import PeopleSay from "../../components/PeopleSayCustomer";
-import FindUs from "../../components/FindUsCustomer";
-import Footer from "../../components/Footerowner";
-=======
 import Navbar from "@/components/Navbarowner";
 import Banner from "@/components/Banner";
 import WhyUs from "@/components/WhyUs";
 import PeopleSay from "@/components/PeopleSay";
 import FindUs from "@/components/FindUs";
 import Footer from "@/components/Footerowner";
->>>>>>> 3e42a36f006cb7135cf513594c020c017b5a4482
 import "../styles.css";
 import { getUser } from "@/components/UserInfo";
 import { useEffect, useState } from "react";
@@ -176,7 +167,6 @@ const HomePage = () => {
       </Head>
       {user && <Navbar name={user.result.name} role={user.result.role} />}
       <SearchCarPage />
-      {/* <ListCar listCar={listCar.filter((car) => car.status == "Available")} /> */}
       <ListCar listCar={listCar.filter((car) => car.status != "Stopped")} />
       <WhyUs sections={sections} />
       <PeopleSay feedbackData={feedbackData} />

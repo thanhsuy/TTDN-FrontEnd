@@ -49,6 +49,7 @@ const Booking = ({ booking}: any) => {
       }
     }
     useEffect(() => {
+      
       fetchCar();
     },[]);
     return (    

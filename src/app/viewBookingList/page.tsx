@@ -27,7 +27,6 @@ const ViewBookingList: React.FC = () => {
     };
 
     fetchUser();
-
     const fetchBookings = async () => {
       try {
         const data = await getBookingsForCurrentUser();
@@ -106,4 +105,3 @@ const getStatusClass = (status: string) => {
       return '';
   }
 };
-

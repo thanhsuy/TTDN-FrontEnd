@@ -97,7 +97,8 @@ export default function LoginForm() {
       });
 
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        // throw new Error("Network response was not ok");
+        response.json().then(data => alert(data.message));   
       }
 
       const data = await response.json();
@@ -119,10 +120,11 @@ export default function LoginForm() {
   };
 
   return (
-    <div>
+    <div className="">
       <Navbar />
       {isRegister ? (
-        <form onSubmit={handleRegister} className="register">
+        <div className="container align-items-center border-0 flex-column justify-content-center">
+          <form onSubmit={handleRegister} className="register w-100 border p-4">
           <div>
             <label>
               Name:
@@ -254,48 +256,71 @@ export default function LoginForm() {
           <div>
             <input type="submit" value="Register" />
           </div>
+          <button onClick={() => setIsRegister(!isRegister)}>
+            {isRegister ? "Go to Login" : "Go to Register"}
+          </button>
         </form>
+        </div>
       ) : (
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            handleSubmit();
-          }}
-          className="login"
+        <div
+          className="container align-items-center border-0 flex-column"
+          style={{ height: "50vh" }}
         >
-          <div>
-            <label>
-              Email:
-              <input
-                type="text"
-                name="username"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              Password:
-              <input
-                type="password"
-                name="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </label>
-          </div>
-          <div>
-            <input type="submit" value="Log In" />
-          </div>
-        </form>
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              handleSubmit();
+            }}
+            className="login w-100 border p-4"
+          >
+            <h2>Đăng nhập</h2>
+            <div>
+              <label>
+                Email:
+                <input
+                  type="text"
+                  name="username"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
+              </label>
+            </div>
+            <div>
+              <label>
+                Password:
+                <input
+                  type="password"
+                  name="password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </label>
+            </div>
+            <div>
+              <input type="submit" value="Log In" />
+            </div>
+            <div className="d-flex w-100 justify-content-between">
+              <button
+                onClick={() => setIsRegister(!isRegister)}
+                className="col-3 bg-primary"
+              >
+                {isRegister ? "Go to Login" : "Go to Register"}
+              </button>
+              <button
+                onClick={() => router.back()}
+                className="col-3 bg-secondary"
+              >
+                Quay lại
+              </button>
+            </div>
+          </form>
+        </div>
       )}
       <div id="messageContainer">{message}</div>
-      <button onClick={() => setIsRegister(!isRegister)}>
-        {isRegister ? "Go to Login" : "Go to Register"}
-      </button>
-      <button onClick={() => router.back()}>Quay lại</button>
-      <button onClick={() => router.push("/forget_password")}>
+      <button
+        onClick={() => router.push("/forget_password")}
+        className="col-3 bg-success"
+      >
         Quên mật khẩu
       </button>
     </div>

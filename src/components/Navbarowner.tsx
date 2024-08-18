@@ -2,7 +2,18 @@
 import Link from "next/link";
 import "../app/styles.css";
 import { useRouter } from "next/navigation";
+<<<<<<< HEAD
 import { ReactElement, JSXElementConstructor, ReactNode, ReactPortal, AwaitedReactNode, useEffect } from "react";
+=======
+import {
+  ReactElement,
+  JSXElementConstructor,
+  ReactNode,
+  ReactPortal,
+  AwaitedReactNode,
+  useEffect,
+} from "react";
+>>>>>>> 3e42a36f006cb7135cf513594c020c017b5a4482
 
 type UserName = {
   name: string;

@@ -26,6 +26,7 @@ const SearchResultsPage = () => {
 
   React.useEffect(() => {
 
+
     const fetchUser = async () => {
       try {
         const userData = await getUser();

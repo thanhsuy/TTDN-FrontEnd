@@ -140,6 +140,12 @@ const ProfilePage: React.FC = () => {
       await updateProfile(profileData.iduser, updatedProfileData);
       alert("Profile updated successfully!");
       router.replace('/profile');  // Reload the page using router.replace
+      //   address: `${profileData.housenumber},${profileData.ward},${profileData.district},${profileData.city}`,
+      // };
+      // const data = await updateProfile(profileData.iduser, updatedProfileData);
+      // router.back();
+      // console.log("Profile updated:", data);
+
     } catch (error) {
       console.error("Error updating profile:", error);
     }

@@ -19,6 +19,7 @@ const BookingCard = ({ booking, car }: any) => {
     "Pending Deposit": "paidDeposid",
     "Confirmed": "confirmpickup",
     "In - Progress": "returncar",
+    "Pending Payment": "returncar"
   };
   const bookingMethodPost = async (method: any, idbooking: any) => {
     try {
@@ -40,7 +41,7 @@ const BookingCard = ({ booking, car }: any) => {
         }
       );
       if (!response.ok) {
-        throw new Error("Network response was not ok");
+        response.json().then(data => alert(data.message));      
       }
       const data = await response.json();
       return data;
@@ -94,10 +95,9 @@ const BookingCard = ({ booking, car }: any) => {
   };
   useEffect(() => {}, [booking]);
   return (
-    <div className="container d-flex pt-4">
+    <div className="container d-flex pt-4 border-0 m-0">
       <div className="row d-flex align-items-center">
-        <div className="col-5">
-          {car && <img src={car.images} alt="" style={{ width: "100%" }} />}
+        <div className="col-5">{car && <img src={car.images} alt="" style={{ width: "100%" }} />}
         </div>
         {car && booking && (
           <div className="col-6">
@@ -120,32 +120,43 @@ const BookingCard = ({ booking, car }: any) => {
             </div>
 
             <div className="row d-flex justify-content-around">
-              <button className="col-4 btn btn-secondary" onClick={handleBack}>
-                Back
-              </button>
+              
               {listMethod[booking.status] == "paidDeposid" && (
-                <button className="col-4 btn btn-primary" onClick={handleClick}>
-                  Xac nhan tra tien coc
+                <>
+                <button className="col-5 btn btn-secondary" onClick={handleBack}>
+                  Back
                 </button>
+                <button className="col-5 btn btn-primary" onClick={handleClick}>
+                  Xac nhan tra tien
+                </button>
+                </>
               )}
               {listMethod[booking.status] == "returncar" && (
-                <button className="col-4 btn btn-primary" onClick={handleClick}>
+                <>
+                <button className="col-5 btn btn-secondary" onClick={handleBack}>
+                  Back
+                </button>
+                <button className="col-5 btn btn-primary" onClick={handleClick}>
                   Xac nhan tra xe
                 </button>
+                </>
               )}
               {booking.status == "Confirmed" && (
-                <div className="col-8">
-                  <button
-                    className="col-6 btn btn-primary"
-                    onClick={handleClick}
-                  >
-                    Xac nhan lay xe
+                <div className="row d-flex justify-content-between">
+                  <button className="col-3 btn btn-secondary" onClick={handleBack}>
+                  Back
                   </button>
                   <button
-                    className="col-6 btn btn-danger"
+                    className="col-3 btn btn-primary"
+                    onClick={handleClick}
+                  >
+                    Lay xe
+                  </button>
+                  <button
+                    className="col-3 btn btn-danger"
                     onClick={handleCancle}
                   >
-                    Huy hoa don
+                    Huy
                   </button>
                 </div>
               )}

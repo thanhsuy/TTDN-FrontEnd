@@ -57,6 +57,12 @@ const Booking = ({ booking}: any) => {
         <div className="row d-flex justify-content-end">
             {car && 
             <div className="container">
+    {/* <div className="col-12 flex-column border-bottom">
+      
+        <div className="row d-flex justify-content-end">
+            {car && 
+            <div className="container border-0 "> */}
+
               <div className="row d-flex justify-content-between">
                 <div className="col-6 d-flex">
                   <img src={car.images} alt="" style={{ width: '40%' }} />

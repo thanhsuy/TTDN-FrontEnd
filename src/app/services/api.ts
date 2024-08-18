@@ -1,6 +1,5 @@
 // api.ts
 import axios from 'axios';
-
 import { EditBookingDetailsRequest, FeedbackResponse, ProfileData, SearchCarRequest, SearchCarResponse, TopUpRequest, ViewBookingListResponse, ViewCarDetailsResponse, ViewWalletResponse, WithdrawRequest, SearchCarNewRequest } from '../interfaces';
 
 const API_URL = 'http://localhost:8080'; // Địa chỉ BE của bạn

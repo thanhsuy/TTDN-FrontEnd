@@ -52,7 +52,6 @@ const WalletPage: React.FC = () => {
         setError('Error fetching wallet details');
       }
     };
-  
     fetchData();
   }, []);
 
@@ -61,8 +60,8 @@ const WalletPage: React.FC = () => {
     try {
       await topUpWallet(topUpAmount);
       const data = await getWalletDetails();
-      
-      // Sắp xếp giao dịch theo thứ tự giảm dần dựa trên datetime
+
+     // Sắp xếp giao dịch theo thứ tự giảm dần dựa trên datetime
       data.transactions.sort((a, b) => new Date(b.datetime).getTime() - new Date(a.datetime).getTime());
   
       setWallet(data);
@@ -225,6 +224,7 @@ const WalletPage: React.FC = () => {
             <MenuItem value={2000000}>2,000,000 VND</MenuItem>
             <MenuItem value={5000000}>5,000,000 VND</MenuItem>
             <MenuItem value={10000000}>10,000,000 VND</MenuItem>
+            <MenuItem value={wallet?.walletBalance}>All balance</MenuItem>
           </Select>
         </DialogContent>
         <DialogActions>

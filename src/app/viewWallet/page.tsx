@@ -21,6 +21,9 @@ const WalletPage: React.FC = () => {
   const [user, setUser] = useState<{ result: { name: string; role: string } } | null>(null);
   const [fromDate, setFromDate] = useState<string>('');
   const [toDate, setToDate] = useState<string>('');
+  const [filteredTransactions, setFilteredTransactions] = useState<ViewWalletResponse | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const transactionsPerPage = 5;
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -37,15 +40,19 @@ const WalletPage: React.FC = () => {
     const fetchData = async () => {
       try {
         const data = await getWalletDetails();
+        
+        // Sắp xếp giao dịch theo thứ tự giảm dần dựa trên datetime
+        data.transactions.sort((a, b) => new Date(b.datetime).getTime() - new Date(a.datetime).getTime());
+  
         setWallet(data);
-        // Cập nhật userId cho các đối tượng request
+        setFilteredTransactions(data); // Lưu trữ bản sao cho chức năng reset
         setTopUpAmount({ ...topUpAmount, userId: data.userId });
         setWithdrawAmount({ ...withdrawAmount, userId: data.userId });
       } catch (error) {
         setError('Error fetching wallet details');
       }
     };
-
+  
     fetchData();
   }, []);
 
@@ -54,7 +61,12 @@ const WalletPage: React.FC = () => {
     try {
       await topUpWallet(topUpAmount);
       const data = await getWalletDetails();
+      
+      // Sắp xếp giao dịch theo thứ tự giảm dần dựa trên datetime
+      data.transactions.sort((a, b) => new Date(b.datetime).getTime() - new Date(a.datetime).getTime());
+  
       setWallet(data);
+      setFilteredTransactions(data); // Cập nhật lại dữ liệu sau khi nạp tiền
       setShowTopUpDialog(false);
     } catch (error) {
       setError('Error topping up wallet');
@@ -66,7 +78,12 @@ const WalletPage: React.FC = () => {
     try {
       await withdrawFromWallet(withdrawAmount);
       const data = await getWalletDetails();
+
+      // Sắp xếp giao dịch theo thứ tự giảm dần dựa trên datetime
+      data.transactions.sort((a, b) => new Date(b.datetime).getTime() - new Date(a.datetime).getTime());
+
       setWallet(data);
+      setFilteredTransactions(data); // Cập nhật lại dữ liệu sau khi rút tiền
       setShowWithdrawDialog(false);
     } catch (error) {
       setError('Error withdrawing from wallet');
@@ -87,9 +104,28 @@ const WalletPage: React.FC = () => {
         const transactionDate = new Date(transaction.datetime).toISOString().split('T')[0];
         return transactionDate >= fromDate && transactionDate <= toDate;
       });
-      setWallet({ ...wallet, transactions: filteredTransactions });
+
+      // Sắp xếp lại các giao dịch đã lọc
+    filteredTransactions.sort((a, b) => new Date(b.datetime).getTime() - new Date(a.datetime).getTime());
+
+      setFilteredTransactions({ ...wallet, transactions: filteredTransactions });
+      setCurrentPage(1); // Reset lại trang về đầu tiên khi tìm kiếm
     }
   };
+
+  const handleReset = () => {
+    setFilteredTransactions(wallet); // Khôi phục lại danh sách giao dịch ban đầu
+    setFromDate('');
+    setToDate('');
+    setCurrentPage(1); // Reset lại trang về đầu tiên
+  };
+
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  // Tính toán index của giao dịch cần hiển thị
+  const indexOfLastTransaction = currentPage * transactionsPerPage;
+  const indexOfFirstTransaction = indexOfLastTransaction - transactionsPerPage;
+  const currentTransactions = filteredTransactions?.transactions.slice(indexOfFirstTransaction, indexOfLastTransaction);
 
   return (
     <>
@@ -114,6 +150,7 @@ const WalletPage: React.FC = () => {
               <label>From: <input type="date" value={fromDate} onChange={(e) => setFromDate(e.target.value)} /></label>
               <label>To: <input type="date" value={toDate} onChange={(e) => setToDate(e.target.value)} /></label>
               <button onClick={handleDateFilter}>Search</button>
+              <button onClick={handleReset}>Reset</button>
             </div>
             <table className="transactions-table">
               <thead>
@@ -128,9 +165,9 @@ const WalletPage: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {wallet.transactions.map((transaction, index) => (
+                {currentTransactions?.map((transaction, index) => (
                   <tr key={transaction.idtransactions}>
-                    <td>{index + 1}</td>
+                    <td>{indexOfFirstTransaction + index + 1}</td>
                     <td>{transaction.amount.toLocaleString('vi-VN')}</td>
                     <td>{transaction.type}</td>
                     <td>{new Date(transaction.datetime).toLocaleString()}</td>
@@ -141,6 +178,15 @@ const WalletPage: React.FC = () => {
                 ))}
               </tbody>
             </table>
+
+            {/* Phân trang */}
+            <div className="pagination">
+              {Array.from({ length: Math.ceil((filteredTransactions?.transactions.length || 0) / transactionsPerPage) }, (_, i) => (
+                <button key={i + 1} onClick={() => paginate(i + 1)} className={i + 1 === currentPage ? "active" : ""}>
+                  {i + 1}
+                </button>
+              ))}
+            </div>
           </div>
         ) : (
           <p>Loading...</p>
@@ -179,7 +225,6 @@ const WalletPage: React.FC = () => {
             <MenuItem value={2000000}>2,000,000 VND</MenuItem>
             <MenuItem value={5000000}>5,000,000 VND</MenuItem>
             <MenuItem value={10000000}>10,000,000 VND</MenuItem>
-            <MenuItem value={wallet?.walletBalance}>All balance</MenuItem>
           </Select>
         </DialogContent>
         <DialogActions>

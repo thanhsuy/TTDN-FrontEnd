@@ -92,7 +92,8 @@ export interface ViewBookingListResponse {
   paymentmethod: string;
   status: string;
   carIdcar: number;
-  carImage:string;
+  carImage: string;
+  carName: string;
   carIdcarowner: number;
   userIduser: number;
 }

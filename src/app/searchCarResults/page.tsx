@@ -1,9 +1,14 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { searchCar, searchCarNew } from "../services/api";
 import { SearchCarResponse, SearchCarNewRequest } from "../interfaces";
+import Head from 'next/head';
+import Footer from '@/components/Footerowner';
+import { getUser } from "@/components/UserInfo";
+import Navbar from "../../components/Navbarowner";
+import "../styles.css";
 
 const SearchResultsPage = () => {
   const [results, setResults] = React.useState<SearchCarResponse[]>([]);
@@ -11,6 +16,7 @@ const SearchResultsPage = () => {
   const address = searchParams.get("address");
   const startDateTime = searchParams.get("startDateTime");
   const endDateTime = searchParams.get("endDateTime");
+  const [user, setUser] = useState<{ result: { name: string; role: string } } | null>(null);
   const result: SearchCarNewRequest = {
     address: address || "", // Sử dụng chuỗi rỗng nếu giá trị là null
     startDateTime: startDateTime ? new Date(startDateTime).toISOString() : "", // Chuyển đổi nếu không phải null
@@ -19,6 +25,18 @@ const SearchResultsPage = () => {
   const router = useRouter();
 
   React.useEffect(() => {
+
+    const fetchUser = async () => {
+      try {
+        const userData = await getUser();
+        setUser(userData);
+      } catch (error) {
+        console.error("Failed to fetch user:", error);
+      }
+    };
+
+    fetchUser();
+
     if (address) {
       searchCarNew(result)
         .then((response) => {
@@ -36,6 +54,12 @@ const SearchResultsPage = () => {
   };
 
   return (
+    <>
+      <Head>
+        <title>Wallet Details</title>
+        <link rel="stylesheet" href="styles.css" />
+      </Head>
+      {user && <Navbar name={user.result.name} role={user.result.role} />}
     <div>
       <h1>Search Results for: {address}</h1>
       {results.map((carResult) => (
@@ -45,7 +69,8 @@ const SearchResultsPage = () => {
           style={{ cursor: "pointer" }}
         >
           <h2>
-            {carResult.car.make} {carResult.car.model}
+            {/* {carResult.car.make} {carResult.car.model} */}
+            {carResult.car.name}
           </h2>
           <p>Year: {carResult.car.productionyears}</p>
           <p>Color: {carResult.car.color}</p>
@@ -57,6 +82,8 @@ const SearchResultsPage = () => {
         </div>
       ))}
     </div>
+    <Footer />
+    </>
   );
 };
 

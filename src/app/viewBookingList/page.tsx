@@ -62,9 +62,9 @@ const ViewBookingList: React.FC = () => {
               <img src={booking.carImage} alt="Car Image" className="car-image" />
             </div>
             <div className="booking-details">
-              <h2 className="car-name">Nissan Navara EL 2017</h2> {/* Replace with dynamic car name */}
+              <h2 className="car-name">{booking.carName}</h2> {/* Replace with dynamic car name */}
               <p className="booking-date">
-                From: {booking.startdatetime} - To: {booking.enddatetime}
+                From: {new Date(booking.startdatetime).toLocaleString()} - To: {new Date(booking.enddatetime).toLocaleString()}
               </p>
               <p className="booking-status">Booking Status: <span className={getStatusClass(booking.status)}>{booking.status}</span></p>
               <p className="booking-number">Booking No.: {booking.bookingno}</p>

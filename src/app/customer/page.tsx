@@ -167,7 +167,8 @@ const HomePage = () => {
       </Head>
       {user && <Navbar name={user.result.name} role={user.result.role} />}
       <SearchCarPage />
-      <ListCar listCar={listCar.filter((car) => car.status == "Available")} />
+      {/* <ListCar listCar={listCar.filter((car) => car.status == "Available")} /> */}
+      <ListCar listCar={listCar.filter((car) => car.status != "Stopped")} />
       <WhyUs sections={sections} />
       <PeopleSay feedbackData={feedbackData} />
       <FindUs carData={carData} />

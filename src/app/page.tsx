@@ -4,7 +4,6 @@
 import { useEffect, useState } from "react";
 import Head from "next/head";
 import Navbar from "../components/Navbar";
-import NavbarCarOwner from "../components/Navbarowner";
 import Banner from "../components/Banner";
 import WhyUs from "../components/WhyUs";
 import PeopleSay from "../components/PeopleSay";
@@ -52,6 +51,12 @@ const sections: Section[] = [
     title: "Trusted service",
     content:
       "Our customers trust us to provide reliable and quality service every time.",
+  },
+  {
+    icon: "fa-thumbs-up",
+    title: "24/7 support",
+    content:
+      "Our team is ready to support you all along the way with our 24/7 hotline and service.",
   },
 ];
 

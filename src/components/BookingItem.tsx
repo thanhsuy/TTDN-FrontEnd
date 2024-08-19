@@ -132,90 +132,188 @@ const BookingItem = ({ car }: any) => {
   };
 
   return (
-    <div className="container d-flex border-0 m-0">
+    <div
+      className="container mt-4 d-flex flex-column"
+      style={{ minHeight: "100vh" }}
+    >
       {car && (
-        <div className="row">
-          <div className="col-5">
-            <img src={car.images} alt="" style={{ width: "100%" }} />
-          </div>
-          <div className="col-5">
-            <form onSubmit={handleSubmit}>
-              <div className="mb-1">
-                <label className="form-label">Start date time</label>
-                <input
-                  type="datetime-local"
-                  className="form-control"
-                  name="startdatetime"
-                  value={formData.startdatetime}
-                  onChange={handleDateChange}
-                  required
+        <div className="container mt-4 flex-grow-1">
+          {/* Car Information */}
+          <h1 className="text-center mb-4" style={{ padding: "15px" }}>
+            Rent a car today!
+          </h1>
+          <div className="border rounded p-3 bg-light">
+            <div className="row">
+              <div className="col-md-6">
+                <img
+                  src={car.images}
+                  alt={car.name}
+                  className="img-fluid rounded"
                 />
-              </div>
-              <div className="mb-1">
-                <label className="form-label">End date time</label>
-                <input
-                  type="datetime-local"
-                  className="form-control"
-                  name="enddatetime"
-                  value={formData.enddatetime}
-                  onChange={handleDateChange}
-                  required
-                />
+                <h2 className="mt-3">{car.name}</h2>
+                <p>
+                  Ratings: <span className="text-warning">★★★★★</span>
+                </p>
+                <p>
+                  Price: <strong>{car.baseprice} VND/day</strong>
+                </p>
+                <p>
+                  Location: <strong>{car.address}</strong>
+                </p>
+                <p>
+                  Status: <strong className="text-success">Available</strong>
+                </p>
               </div>
 
-              <div className="dropdown w-100">
-                <div className="d-flex align-items-center">
-                  <input
-                    type="radio"
-                    name="paymentmethod"
-                    value="My wallet"
-                    id="wallet"
-                  />
-                  <label className="form-label m-2" htmlFor="wallet">
-                    My wallet
-                  </label>
-                  {user.result.wallet > car.deposite ? (
-                    <span className="text-success">{user.result.wallet}$</span>
-                  ) : (
-                    <span className="text-danger">{user.result.wallet}$</span>
-                  )}
-                </div>
-                <div className="d-flex align-items-center">
-                  <input
-                    type="radio"
-                    name="paymentmethod"
-                    value="Cash"
-                    id="cash"
-                  />
-                  <label className="form-label m-2" htmlFor="cash">
-                    Cash
-                  </label>
-                </div>
-                <div className="d-flex align-items-center">
-                  <input
-                    type="radio"
-                    name="paymentmethod"
-                    value="Bank transfer"
-                    id="banktransfer"
-                  />
-                  <label className="form-label m-2" htmlFor="banktransfer">
-                    Bank transfer
-                  </label>
-                </div>
+              <div className="col-md-6">
+                {/* Booking Information */}
+                <h3>Booking Information</h3>
+                <form onSubmit={handleSubmit}>
+                  <div className="mb-3">
+                    <label htmlFor="startdatetime" className="form-label">
+                      Start date time
+                    </label>
+                    <input
+                      type="datetime-local"
+                      className="form-control"
+                      name="startdatetime"
+                      id="startdatetime"
+                      value={formData.startdatetime}
+                      onChange={handleDateChange}
+                      required
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label htmlFor="enddatetime" className="form-label">
+                      End date time
+                    </label>
+                    <input
+                      type="datetime-local"
+                      className="form-control"
+                      name="enddatetime"
+                      id="enddatetime"
+                      value={formData.enddatetime}
+                      onChange={handleDateChange}
+                      required
+                    />
+                  </div>
+
+                  <h4>Payment Method</h4>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="paymentmethod"
+                      id="wallet"
+                      value="My wallet"
+                      onChange={handleChange}
+                    />
+                    <label className="form-check-label" htmlFor="wallet">
+                      My wallet
+                    </label>
+                  </div>
+                  <div className="form-check">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="paymentmethod"
+                      id="cash"
+                      value="Cash"
+                      onChange={handleChange}
+                    />
+                    <label className="form-check-label" htmlFor="cash">
+                      Cash
+                    </label>
+                  </div>
+                  <div className="form-check mb-4">
+                    <input
+                      className="form-check-input"
+                      type="radio"
+                      name="paymentmethod"
+                      id="banktransfer"
+                      value="Bank transfer"
+                      onChange={handleChange}
+                    />
+                    <label className="form-check-label" htmlFor="banktransfer">
+                      Bank transfer
+                    </label>
+                  </div>
+
+                  <div className="d-flex justify-content-between">
+                    <button
+                      className="btn btn-secondary"
+                      type="button"
+                      onClick={() => (window.location.href = "/customer")}
+                    >
+                      BACK
+                    </button>
+                    <button className="btn btn-primary" type="submit">
+                      NEXT
+                    </button>
+                  </div>
+                  <div className="mb-1">
+                    <label className="form-label">Driver's Full Name</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="name"
+                      id="name"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div className="mb-1">
+                    <label className="form-label">Driver's Phone Number</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="phoneno"
+                      id="phoneno"
+                      value={formData.phoneno}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div className="mb-1">
+                    <label className="form-label">Driver's Email Address</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="email"
+                      id="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div className="mb-1">
+                    <label className="form-label">Driver's License</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      name="drivinglicense"
+                      id="drivinglicense"
+                      value={formData.drivinglicense}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                </form>
               </div>
-              <div className="row d-flex justify-content-around">
-                <button
-                  className="col-4 btn btn-secondary"
-                  onClick={() => (window.location.href = "/customer")}
-                >
-                  BACK
-                </button>
-                <button className="col-4 btn btn-primary" type="submit">
-                  NEXT
-                </button>
-              </div>
-            </form>
+            </div>
           </div>
+        </div>
+      )}
+
+      {/* Driver's Information Section at the Bottom */}
+      {user && (
+        <div
+          className="driver-info-container mt-4"
+          style={{ maxHeight: "300px", overflowY: "auto" }}
+        >
+          <h3>Driver's Information</h3>
+          <form onSubmit={handleSubmit}></form>
         </div>
       )}
     </div>

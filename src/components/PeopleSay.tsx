@@ -18,7 +18,7 @@ const PeopleSay: React.FC<PeopleSayProps> = ({ feedbackData }) => {
       id="people-say"
       style={{
         background: "#8080805c",
-        padding: "20px 50px 80px 20px",
+        padding: "20px 50px 80px 50px",
         width: "100%",
         height: "450px",
       }}

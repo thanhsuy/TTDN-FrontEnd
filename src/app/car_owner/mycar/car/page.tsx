@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { json } from "stream/consumers";
 import styles from "../car/styles.module.css";
+import { useRouter } from "next/navigation";
 
 const Car = ({ car, star }: Props) => {
   const [status, setStatus] = useState(car.status);
+  const router = useRouter();
 
   const handleStopCar = async () => {
     try {
@@ -27,6 +29,15 @@ const Car = ({ car, star }: Props) => {
       console.error("Error fetching data:", error);
     }
   };
+
+  const handleEditCar = async () => {
+    try {
+      router.push(`/car_owner/mycar/cardetail/${car.idcar}`);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
   useEffect(() => {}, [status]);
 
   return (
@@ -51,6 +62,11 @@ const Car = ({ car, star }: Props) => {
         {status === "Available" && (
           <button className="btn btn-danger" onClick={handleStopCar}>
             STOP
+          </button>
+        )}
+        {status !== "Booked" && (
+          <button className="btn btn-danger" onClick={handleEditCar}>
+            Edit
           </button>
         )}
       </div>

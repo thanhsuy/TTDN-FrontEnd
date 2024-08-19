@@ -96,6 +96,7 @@ const HomePage = () => {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
+
       setListCar(data.result);
     } catch (error) {
       console.error("Error fetching car:", error);

@@ -7,7 +7,6 @@ import BookingItem from "@/components/BookingItem";
 import { getUser } from "@/components/UserInfo";
 import Navbar from "@/components/Navbarowner";
 
-
 const Booking = () => {
   const searchParams = useSearchParams();
   const idcar = searchParams.get("idCar");
@@ -55,11 +54,16 @@ const Booking = () => {
 
   return (
     <>
-    {user && <Navbar name={user.result.name} role={user.result.role} />}
-    <div className="container d-flex align-items-center justify-content-center flex-column border-0" style={{height: '100vh'}}>
-      <h2>Tiến hành đặt xe</h2>
-      <BookingItem car={car}/>
-    </div>
+      {user && <Navbar name={user.result.name} role={user.result.role} />}
+      <div
+        className="container d-flex align-items-center justify-content-center flex-column border-0"
+        style={{ minHeight: "calc(100vh - 60px)", paddingTop: "60px" }}
+      >
+        <h2>Tiến hành đặt xe</h2>
+        <div className="">
+          <BookingItem car={car} />
+        </div>
+      </div>
     </>
   );
 };

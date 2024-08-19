@@ -256,9 +256,12 @@ export default function LoginForm() {
           <div>
             <input type="submit" value="Register" />
           </div>
-          <button onClick={() => setIsRegister(!isRegister)}>
+          <div className="container align-items-center border-0 flex-column">
+          <button
+           onClick={() => setIsRegister(!isRegister)}>
             {isRegister ? "Go to Login" : "Go to Register"}
           </button>
+          </div>
         </form>
         </div>
       ) : (
@@ -300,12 +303,23 @@ export default function LoginForm() {
               <input type="submit" value="Log In" />
             </div>
             <div className="d-flex w-100 justify-content-between">
+
+            <button
+                onClick={() => router.push("/forget_password")}
+                className="col-3 bg-success"
+              >
+                Quên mật khẩu
+              </button>
+
               <button
                 onClick={() => setIsRegister(!isRegister)}
                 className="col-3 bg-primary"
               >
                 {isRegister ? "Go to Login" : "Go to Register"}
               </button>
+
+              
+
               <button
                 onClick={() => router.back()}
                 className="col-3 bg-secondary"
@@ -317,12 +331,12 @@ export default function LoginForm() {
         </div>
       )}
       <div id="messageContainer">{message}</div>
-      <button
+      {/* <button
         onClick={() => router.push("/forget_password")}
         className="col-3 bg-success"
       >
         Quên mật khẩu
-      </button>
+      </button> */}
     </div>
   );
 }

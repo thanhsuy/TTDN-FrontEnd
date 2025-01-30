@@ -14,7 +14,6 @@ const Booking = () => {
   const [user, setUser] = useState(null);
 
   const fetchCar = async (idcar: any) => {
-    console.log(idcar);
     try {
       const response = await fetch(`http://localhost:8080/getcar/${idcar}`, {
         method: "GET",
@@ -25,13 +24,11 @@ const Booking = () => {
       });
       if (!response.ok) {
         // console.log(response.json());
-        console.log("1");
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
       setCar(data?.result);
     } catch (error) {
-      console.log("1");
       console.error("Error fetching booking:", error);
     }
   };
@@ -57,10 +54,11 @@ const Booking = () => {
       {user && <Navbar name={user.result.name} role={user.result.role} />}
       <div
         className="container d-flex align-items-center justify-content-center flex-column border-0"
-        style={{ height: "120vh" }}
+        style={{ minHeight: "calc(100vh - 60px)", paddingTop: "60px" }}
       >
-        <h2>Tiến hành đặt xe</h2>
-        <BookingItem car={car} />
+        <div className="">
+          <BookingItem car={car} />
+        </div>
       </div>
     </>
   );

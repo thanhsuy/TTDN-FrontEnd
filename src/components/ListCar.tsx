@@ -1,27 +1,21 @@
-// components/ListCar.js
 import Link from "next/link";
-import { list } from "postcss";
+import "./ListCar.css";
 
 const ListCar = ({ listCar }: any) => {
-  const handleClick = () => {};
-
   return (
-    <div className="container d-flex pt-4">
-      <div className="row">
+    <div className="list-car-container">
+      <h2 className="list-car-title">🚗 Danh sách xe</h2>
+      <div className="list-car-grid">
         {listCar.map((car) => (
-          <div className="col-4">
-            <Link href={`/viewCarDetails/${car.idcar}`} className="row">
-              <div className="col-5">
-                <img
-                  src={car.images}
-                  alt=""
-                  style={{ width: "100%" }}
-                  onClick={handleClick}
-                />
-              </div>
-              <div className="col-5">
-                <p>Name: {car.name}</p>
-                <button className="btn btn-primary">Rent Now!</button>
+          <div key={car.idcar} className="list-car-item">
+            <Link
+              href={`/viewCarDetails/${car.idcar}`}
+              className="list-car-link"
+            >
+              <img src={car.images} alt={car.name} className="list-car-img" />
+              <div className="list-car-info">
+                <p className="list-car-name">{car.name}</p>
+                <button className="list-car-btn">Thuê ngay</button>
               </div>
             </Link>
           </div>

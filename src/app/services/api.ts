@@ -283,10 +283,10 @@ export const getCarAverageRating = async (idcar: number): Promise<number> => {
   }
 
   try {
-    const response = await axios.get(`${API_URL}/viewFeedbackReport/cars/${idcar}/averageRatingByIdCar`, {
+    const response = await axios.get(`${API_URL}/viewFeedbackReport/averageRatingByIdCar/${idcar}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    return response.data;
+    return response.data.avgRating;
   } catch (error) {
     console.error('Error fetching car average rating:', error);
     throw error;

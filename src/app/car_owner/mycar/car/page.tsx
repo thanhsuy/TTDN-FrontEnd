@@ -3,6 +3,7 @@ import { json } from "stream/consumers";
 import styles from "../car/styles.module.css";
 import { useRouter } from "next/navigation";
 
+
 const Car = ({ car, star }: Props) => {
   const [status, setStatus] = useState(car.status);
   const router = useRouter();

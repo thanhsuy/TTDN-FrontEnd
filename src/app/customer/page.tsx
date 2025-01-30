@@ -4,17 +4,24 @@ import Head from "next/head";
 import Navbar from "@/components/Navbarowner";
 import Banner from "@/components/Banner";
 import WhyUs from "@/components/WhyUs";
-import PeopleSay from "@/components/PeopleSay";
-import FindUs from "@/components/FindUs";
+import PeopleSay from "@/components/PeopleSayCustomer";
+import FindUs from "@/components/FindUsCustomer";
 import Footer from "@/components/Footerowner";
 import "../styles.css";
 import { getUser } from "@/components/UserInfo";
 import { useEffect, useState } from "react";
-("D:/TTDN/FPT/FE/ttdn-fpt/src/components/UserInfo");
+("@/components/UserInfo");
 import SearchCarPage from "../searchCar/page";
 import ListCar from "@/components/ListCar";
 
-type CarData = [string, number];
+type CarData = {
+  address: string;
+  car_count: number;
+  car_count_rounded: string;
+  image: string;
+};
+
+type listCar = [CarData];
 
 type User = {
   iduser: number;
@@ -31,15 +38,10 @@ type User = {
 };
 
 type FeedbackData = {
-  bookingCarIdcar: number;
-  bookingCarIdcarowner: number;
-  bookingIdbooking: number;
-  bookingUserIduser: number;
-  content: string;
-  datetime: string;
-  idfeedback: number;
-  rate: number;
-  user: User;
+  UserName: string;
+  FeedbackContent: string;
+  Rating: number;
+  Date: string;
 };
 
 type Section = {
@@ -55,19 +57,19 @@ type UserName = {
 
 const sections: Section[] = [
   {
-    icon: "fa-dollar-sign",
+    icon: "icon/insurance-icon",
     title: "Save money",
     content:
       "We have no setup or registration fees. You are only charged when you rent a car. So get started for FREE!",
   },
   {
-    icon: "fa-car",
+    icon: "icon/handover-icon",
     title: "Variety of cars",
     content:
       "Choose from a wide range of cars available for rent at competitive prices.",
   },
   {
-    icon: "fa-thumbs-up",
+    icon: "icon/user-icon",
     title: "Trusted service",
     content:
       "Our customers trust us to provide reliable and quality service every time.",
@@ -96,6 +98,7 @@ const HomePage = () => {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
+
       setListCar(data.result);
     } catch (error) {
       console.error("Error fetching car:", error);
@@ -112,31 +115,20 @@ const HomePage = () => {
   useEffect(() => {
     const fetchCarData = async () => {
       const token = getToken();
-      const carRes = await fetch(
-        "http://localhost:8080/viewhomeCustomer/top-cities",
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const carRes = await fetch("http://localhost:8080/viewHomepage/getCity", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
       const carData = await carRes.json();
       setCarData(carData.result);
     };
 
     const fetchFeedbackData = async () => {
-      const token = getToken();
       const feedbackRes = await fetch(
-        "http://localhost:8080/viewhomeCustomer/feedback",
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
+        "http://localhost:8080/viewHomepage/getFeedback"
       );
       const feedbackData = await feedbackRes.json();
       setFeedbackData(feedbackData.result);
@@ -167,7 +159,16 @@ const HomePage = () => {
       </Head>
       {user && <Navbar name={user.result.name} role={user.result.role} />}
       <SearchCarPage />
-      <ListCar listCar={listCar.filter((car) => car.status != "Stopped")} />
+      <div
+        className="card shadow-sm p-3 mb-4"
+        style={{ margin: "20px", backgroundColor: "rgb(102 102 102)" }}
+      >
+        <div className="card-body">
+          <ListCar
+            listCar={listCar.filter((car) => car.status !== "Stopped")}
+          />
+        </div>
+      </div>
       <WhyUs sections={sections} />
       <PeopleSay feedbackData={feedbackData} />
       <FindUs carData={carData} />

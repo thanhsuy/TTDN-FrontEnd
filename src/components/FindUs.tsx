@@ -1,4 +1,3 @@
-// components/FindUs/FindUs.tsx
 import React from "react";
 
 type CarData = {
@@ -14,29 +13,40 @@ type FindUsProps = {
 
 const FindUs: React.FC<FindUsProps> = ({ carData }) => {
   return (
-    <div
-      style={{ padding: "20px 50px 80px 20px", width: "100%", height: "670px" }}
-      id="find-us"
-    >
-      <h2 style={{ width: "100%", height: "25px" }}>Where to find us?</h2>
-      {carData.map((item, index) => (
-        <div
-          key={index}
-          style={{
-            // backgroundImage: `url(${item.image})`,
-            backgroundImage: `url("https://vov.vn/sites/default/files/styles/large/public/2020-10/HN.jpg")`,
-            color: "white",
-            padding: "145px 0px 0px 5px",
-            float: "left",
-            margin: "50px",
-            width: "27%",
-            height: "40%",
-          }}
-        >
-          <h3>{item.address}</h3>
-          <h3>{item.car_count} cars</h3>
+    <div id="find-us" className="py-5 bg-light">
+      <div className="container">
+        <h2 className="text-left mb-4">Where to find us?</h2>
+        <div className="row">
+          {carData.map((item, index) => (
+            <div
+              key={index}
+              className="col-md-3 mb-4"
+              style={{ marginRight: "70px" }}
+            >
+              <div
+                style={{
+                  backgroundImage: `url("https://vov.vn/sites/default/files/styles/large/public/2020-10/HN.jpg")`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  color: "white",
+                  width: "300px",
+                  height: "250px",
+                }}
+              >
+                <div
+                  className="d-flex flex-column justify-content-end h-100 text-white p-3 rounded"
+                  style={{
+                    background: "rgba(0, 0, 0, 0.6)",
+                  }}
+                >
+                  <h3>{item.address}</h3>
+                  <h4>{item.car_count} cars</h4>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
-      ))}
+      </div>
     </div>
   );
 };

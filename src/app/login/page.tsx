@@ -98,7 +98,7 @@ export default function LoginForm() {
 
       if (!response.ok) {
         // throw new Error("Network response was not ok");
-        response.json().then(data => alert(data.message));   
+        response.json().then((data) => alert(data.message));
       }
 
       const data = await response.json();
@@ -109,7 +109,6 @@ export default function LoginForm() {
         setEmail(registerData.email);
         setPassword(registerData.password);
         console.log(registerData.email);
-        handleSubmit();
       } else {
         setMessage("Registration failed");
       }
@@ -121,28 +120,38 @@ export default function LoginForm() {
 
   return (
     <div className="">
-      <Navbar />
+      {" "}
+      <Navbar />{" "}
       {isRegister ? (
-        <div className="container align-items-center border-0 flex-column justify-content-center">
-          <form onSubmit={handleRegister} className="register w-100 border p-4">
-          <div>
-            <label>
-              Name:
+        <div
+          className="container d-flex align-items-center border-0 flex-column vh-100"
+          style={{ marginTop: "50px" }}
+        >
+          <form
+            onSubmit={handleRegister}
+            className="register w-50 border p-4 bg-light shadow-sm"
+          >
+            {" "}
+            <h2 className="mb-4">Register</h2>{" "}
+            <div className="form-group mb-3">
+              {" "}
+              <label className="form-label">Name:</label>{" "}
               <input
                 type="text"
+                className="form-control"
                 name="name"
                 value={registerData.name}
                 onChange={(e) =>
                   setRegisterData({ ...registerData, name: e.target.value })
                 }
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              Date of Birth:
+              />{" "}
+            </div>{" "}
+            <div className="form-group mb-3">
+              {" "}
+              <label className="form-label">Date of Birth:</label>{" "}
               <input
                 type="date"
+                className="form-control"
                 name="dateofbirth"
                 value={registerData.dateofbirth}
                 onChange={(e) =>
@@ -151,14 +160,14 @@ export default function LoginForm() {
                     dateofbirth: e.target.value,
                   })
                 }
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              National ID No:
+              />{" "}
+            </div>{" "}
+            <div className="form-group mb-3">
+              {" "}
+              <label className="form-label">National ID No:</label>{" "}
               <input
                 type="number"
+                className="form-control"
                 name="nationalidno"
                 value={registerData.nationalidno}
                 onChange={(e) =>
@@ -167,53 +176,53 @@ export default function LoginForm() {
                     nationalidno: e.target.value,
                   })
                 }
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              Email:
+              />{" "}
+            </div>{" "}
+            <div className="form-group mb-3">
+              {" "}
+              <label className="form-label">Email:</label>{" "}
               <input
                 type="email"
+                className="form-control"
                 name="email"
                 value={registerData.email}
                 onChange={(e) =>
                   setRegisterData({ ...registerData, email: e.target.value })
                 }
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              Phone No:
+              />{" "}
+            </div>{" "}
+            <div className="form-group mb-3">
+              {" "}
+              <label className="form-label">Phone No:</label>{" "}
               <input
                 type="text"
+                className="form-control"
                 name="phoneno"
                 value={registerData.phoneno}
                 onChange={(e) =>
                   setRegisterData({ ...registerData, phoneno: e.target.value })
                 }
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              Address:
+              />{" "}
+            </div>{" "}
+            <div className="form-group mb-3">
+              {" "}
+              <label className="form-label">Address:</label>{" "}
               <input
                 type="text"
+                className="form-control"
                 name="address"
                 value={registerData.address}
                 onChange={(e) =>
                   setRegisterData({ ...registerData, address: e.target.value })
                 }
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              Driving License:
+              />{" "}
+            </div>{" "}
+            <div className="form-group mb-3">
+              {" "}
+              <label className="form-label">Driving License:</label>{" "}
               <input
                 type="text"
+                className="form-control"
                 name="drivinglicense"
                 value={registerData.drivinglicense}
                 onChange={(e) =>
@@ -222,107 +231,133 @@ export default function LoginForm() {
                     drivinglicense: e.target.value,
                   })
                 }
-              />
-            </label>
-          </div>
-          <div>
-            <label>
-              Role:
+              />{" "}
+            </div>{" "}
+            <div className="form-group mb-3">
+              {" "}
+              <label className="form-label">Role:</label>{" "}
               <select
+                className="form-control"
                 name="role"
                 value={registerData.role}
                 onChange={(e) =>
                   setRegisterData({ ...registerData, role: e.target.value })
                 }
               >
-                <option value="CUSTOMER">CUSTOMER</option>
-                <option value="CAROWNER">CAROWNER</option>
-              </select>
-            </label>
-          </div>
-          <div>
-            <label>
-              Password:
+                {" "}
+                <option value="CUSTOMER">CUSTOMER</option>{" "}
+                <option value="CAROWNER">CAROWNER</option>{" "}
+              </select>{" "}
+            </div>{" "}
+            <div className="form-group mb-3">
+              {" "}
+              <label className="form-label">Password:</label>{" "}
               <input
                 type="password"
+                className="form-control"
                 name="password"
                 value={registerData.password}
                 onChange={(e) =>
                   setRegisterData({ ...registerData, password: e.target.value })
                 }
-              />
-            </label>
-          </div>
-          <div>
-            <input type="submit" value="Register" />
-          </div>
-          <button onClick={() => setIsRegister(!isRegister)}>
-            {isRegister ? "Go to Login" : "Go to Register"}
-          </button>
-        </form>
+              />{" "}
+            </div>{" "}
+            <div className="d-grid mb-3">
+              {" "}
+              <input
+                type="submit"
+                value="Register"
+                className="btn btn-primary"
+              />{" "}
+            </div>{" "}
+            <div className="text-center">
+              {" "}
+              <button
+                type="button"
+                onClick={() => setIsRegister(!isRegister)}
+                className="btn btn-link"
+              >
+                {" "}
+                {isRegister ? "Go to Login" : "Go to Register"}{" "}
+              </button>{" "}
+            </div>{" "}
+          </form>{" "}
         </div>
       ) : (
         <div
-          className="container align-items-center border-0 flex-column"
-          style={{ height: "50vh" }}
+          className="container d-flex align-items-center border-0 flex-column vh-100"
+          style={{ marginTop: "50px" }}
         >
           <form
             onSubmit={(e) => {
               e.preventDefault();
               handleSubmit();
             }}
-            className="login w-100 border p-4"
+            className="login w-50 border p-4 bg-light shadow-sm"
           >
-            <h2>Đăng nhập</h2>
-            <div>
-              <label>
-                Email:
-                <input
-                  type="text"
-                  name="username"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-              </label>
-            </div>
-            <div>
-              <label>
-                Password:
-                <input
-                  type="password"
-                  name="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                />
-              </label>
-            </div>
-            <div>
-              <input type="submit" value="Log In" />
-            </div>
+            {" "}
+            <h2 className="mb-4">Đăng nhập</h2>{" "}
+            <div className="form-group mb-3">
+              {" "}
+              <label className="form-label">Email:</label>{" "}
+              <input
+                type="text"
+                className="form-control"
+                name="username"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />{" "}
+            </div>{" "}
+            <div className="form-group mb-3">
+              {" "}
+              <label className="form-label">Password:</label>{" "}
+              <input
+                type="password"
+                className="form-control"
+                name="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />{" "}
+            </div>{" "}
+            <div className="d-grid mb-3">
+              {" "}
+              <input
+                type="submit"
+                value="Log In"
+                className="btn btn-primary"
+              />{" "}
+            </div>{" "}
             <div className="d-flex w-100 justify-content-between">
+              {" "}
               <button
+                type="button"
+                onClick={() => router.push("/forget_password")}
+                className="btn btn-success"
+              >
+                {" "}
+                Quên mật khẩu{" "}
+              </button>{" "}
+              <button
+                type="button"
                 onClick={() => setIsRegister(!isRegister)}
-                className="col-3 bg-primary"
+                className="btn btn-primary"
               >
-                {isRegister ? "Go to Login" : "Go to Register"}
-              </button>
+                {" "}
+                {isRegister ? "Go to Login" : "Go to Register"}{" "}
+              </button>{" "}
               <button
+                type="button"
                 onClick={() => router.back()}
-                className="col-3 bg-secondary"
+                className="btn btn-secondary"
               >
-                Quay lại
-              </button>
-            </div>
-          </form>
+                {" "}
+                Quay lại{" "}
+              </button>{" "}
+            </div>{" "}
+          </form>{" "}
         </div>
-      )}
-      <div id="messageContainer">{message}</div>
-      <button
-        onClick={() => router.push("/forget_password")}
-        className="col-3 bg-success"
-      >
-        Quên mật khẩu
-      </button>
+      )}{" "}
+      <div id="messageContainer">{message}</div>{" "}
     </div>
   );
 }

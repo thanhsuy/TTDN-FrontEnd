@@ -54,6 +54,10 @@ const SearchResultsPage = () => {
     router.push(`/viewCarDetails/${idcar}`);
   };
 
+  const handleCarRentClick = (idcar: number) => {
+    router.push(`/customer/booking?idCar=${idcar}`);
+  };
+
   return (
     <>
       <Head>
@@ -87,10 +91,20 @@ const SearchResultsPage = () => {
               <p>Rate: {carResult.rate} stars</p>
             </div>
             <div className="car-actions">
-              <button onClick={() => handleCarClick(carResult.car.idcar)}>
+              <button onClick={(event) => {
+                  event.stopPropagation();
+                  handleCarClick(carResult.car.idcar);
+                }}
+              >
                 View Details
               </button>
-              <button>Rent now</button>
+              <button onClick={(event) => {
+                  event.stopPropagation();
+                  handleCarRentClick(carResult.car.idcar);
+                }}
+              >
+                Rent now
+              </button>
             </div>
           </div>
         ))}

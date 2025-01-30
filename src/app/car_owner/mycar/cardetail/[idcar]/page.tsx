@@ -194,7 +194,30 @@ const EditCar: React.FC = () => {
         setRes("Sửa sản phẩm thất bại!!");
       }
     } else {
-      setRes("Lỗi khi tải ảnh lên Cloudinary.");
+        try {
+            const response = await fetch(
+              `http://localhost:8080/car/editcar/${id.idcar}`,
+              {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${localStorage.getItem("authToken")}`, // Thêm token vào header Authorization
+                },
+                body: JSON.stringify(formData),
+              }
+            );
+    
+            const result = await response.json();
+            if (result.message === "Success") {
+              setRes("Sửa thành công...");
+              router.push(`/car_owner/mycar`);
+            } else {
+              setRes("Sửa sản phẩm thất bại!!");
+            }
+          } catch (error) {
+            console.error("Error submitting form:", error);
+            setRes("Sửa sản phẩm thất bại!!");
+          }
     }
   };
 

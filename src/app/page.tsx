@@ -4,12 +4,13 @@
 import { useEffect, useState } from "react";
 import Head from "next/head";
 import Navbar from "../components/Navbar";
+import NavbarCarOwner from "../components/Navbarowner";
 import Banner from "../components/Banner";
 import WhyUs from "../components/WhyUs";
 import PeopleSay from "../components/PeopleSay";
 import FindUs from "../components/FindUs";
-import Footer from "../components/Footerowner";
-import "../app/styles.css";
+import Footer from "../components/Footer";
+// import "../app/styles.css";
 
 type CarData = {
   address: string;
@@ -35,28 +36,22 @@ type Section = {
 
 const sections: Section[] = [
   {
-    icon: "fa-dollar-sign",
+    icon: "icon/insurance-icon",
     title: "Save money",
     content:
       "We have no setup or registration fees. You are only charged when you rent a car. So get started for FREE!",
   },
   {
-    icon: "fa-car",
+    icon: "icon/handover-icon",
     title: "Variety of cars",
     content:
       "Choose from a wide range of cars available for rent at competitive prices.",
   },
   {
-    icon: "fa-thumbs-up",
+    icon: "icon/user-icon",
     title: "Trusted service",
     content:
       "Our customers trust us to provide reliable and quality service every time.",
-  },
-  {
-    icon: "fa-thumbs-up",
-    title: "24/7 support",
-    content:
-      "Our team is ready to support you all along the way with our 24/7 hotline and service.",
   },
 ];
 

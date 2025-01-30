@@ -75,9 +75,6 @@ const CarOwner_MyCar = () => {
                 ADD CAR
               </Link>
             </div>
-            <div className="col-2">
-              <div className="btn btn-success">NONE</div>
-            </div>
           </div>
         </div>
       </main>

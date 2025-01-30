@@ -1,63 +1,8 @@
-// 'use client';
-
-// import React, { useState } from 'react';
-// import { useRouter } from 'next/navigation';
-// import { searchCar } from '../services/api';
-// import { SearchCarRequest, SearchCarResponse } from '../interfaces';
-
-// const SearchCarPage: React.FC = () => {
-//   const [address, setAddress] = useState('');
-//   const [carResults, setCarResults] = useState<SearchCarResponse[]>([]);
-//   const router = useRouter();
-
-//   const handleSearch = async () => {
-//     try {
-//       const request: SearchCarRequest = { address };
-//       const response = await searchCar(request);
-//       setCarResults(response.result); // Đảm bảo response.result là danh sách xe
-//     } catch (error) {
-//       console.error('Error searching for cars:', error);
-//     }
-//   };
-
-//   const handleCarClick = (idcar: number) => {
-//     router.push(`/viewCarDetails/${idcar}`);
-//   };
-
-//   return (
-//     <div>
-//       <h1>Search Car</h1>
-//       <input
-//         type="text"
-//         value={address}
-//         onChange={(e) => setAddress(e.target.value)}
-//         placeholder="Enter address"
-//       />
-//       <button onClick={handleSearch}>Search</button>
-//       <div>
-//         {carResults.map((carResult) => (
-//           <div key={carResult.car.idcar} onClick={() => handleCarClick(carResult.car.idcar)} style={{ cursor: 'pointer' }}>
-//             <h2>{carResult.car.make} {carResult.car.model}</h2>
-//             <p>Year: {carResult.car.year}</p>
-//             <p>Color: {carResult.car.color}</p>
-//             <p>Price per day: {carResult.car.pricePerDay}</p>
-//             <p>Status: {carResult.car.status}</p>
-//             <p>Address: {carResult.car.address}</p>
-//             <p>Rate: {carResult.rate}</p>
-//             <p>Booking Number: {carResult.bookingNumber}</p>
-//           </div>
-//         ))}
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default SearchCarPage;
-
 "use client";
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import "./searchCar.css"; 
 
 const SearchCarPage: React.FC = () => {
   const [address, setAddress] = useState("");
@@ -72,33 +17,53 @@ const SearchCarPage: React.FC = () => {
   };
 
   return (
-    <div>
-      <h1>Search Car</h1>
-      <input
-        type="text"
-        value={address}
-        onChange={(e) => setAddress(e.target.value)}
-        placeholder="Enter address"
-      />
-      <div>
-        <label htmlFor="startDateTime">Start Date & Time:</label>
-        <input
-          type="datetime-local"
-          id="startDateTime"
-          value={startDateTime}
-          onChange={(e) => setStartDateTime(e.target.value)}
-        />
+    <div className="search-car-container">
+      <div className="search-car-content">
+        <div className="search-car-info">
+          <h2>Looking for a vehicle? You're at the right place.</h2>
+          <p>
+            We have a large selection of locally owned cars available for you to choose from.
+            Rental plans are customised to suit your needs.
+          </p>
+          <p>
+            With over 300 cars located nationwide we will have something for you.
+          </p>
+        </div>
+
+        <div className="search-car-form">
+          <h2>Find the ideal car rental for your trip</h2>
+          <input
+            type="text"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+            placeholder="Enter your location"
+            className="search-car-input"
+          />
+          <div className="search-car-datetime">
+            <label htmlFor="startDateTime">Pick-up Date and Time:</label>
+            <input
+              type="datetime-local"
+              id="startDateTime"
+              value={startDateTime}
+              onChange={(e) => setStartDateTime(e.target.value)}
+              className="search-car-input"
+            />
+          </div>
+          <div className="search-car-datetime">
+            <label htmlFor="endDateTime">Drop-off Date and Time:</label>
+            <input
+              type="datetime-local"
+              id="endDateTime"
+              value={endDateTime}
+              onChange={(e) => setEndDateTime(e.target.value)}
+              className="search-car-input"
+            />
+          </div>
+          <button onClick={handleSearch} className="search-car-button">
+            SEARCH
+          </button>
+        </div>
       </div>
-      <div>
-        <label htmlFor="endDateTime">End Date & Time:</label>
-        <input
-          type="datetime-local"
-          id="endDateTime"
-          value={endDateTime}
-          onChange={(e) => setEndDateTime(e.target.value)}
-        />
-      </div>
-      <button onClick={handleSearch}>Search</button>
     </div>
   );
 };

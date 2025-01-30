@@ -1,19 +1,19 @@
-// components/ListCar.js
 import Link from "next/link";
-import { list } from "postcss";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/router";
-import { Button } from "bootstrap";
+import { useRouter } from "next/navigation";
 import RatingModal from "./RatingModel";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const BookingCard = ({ booking, car }: any) => {
   const [showModal, setShowModal] = useState(false);
+  const router = useRouter();
+
   const status = {
-    "Pending Deposit": "DANG CHO CHU SO HUU XAC NHAN THANH TOAN",
-    "Confirmed": "DA DUOC CHU XE XAC NHAN THANH TOAN",
-    "Pending Payment": "DANG CHO THANH TOAN NOT HOA DON",
-    "In - Progress": "PHUONG TIEN DANG DUOC SU DUNG",
-    "Cancelled": "HOA DON DA BI HUY",
+    "Pending Deposit": "Waiting for payment confirmation",
+    "Confirmed": "Payment confirmed",
+    "Pending Payment": "Waiting for final payment",
+    "In - Progress": "Car is in use",
+    "Cancelled": "Booking cancelled",
     "Completed": "Completed",
   };
 
@@ -23,15 +23,9 @@ const BookingCard = ({ booking, car }: any) => {
     "In - Progress": "returncar",
     "Pending Payment": "returncar",
   };
+
   const bookingMethodPost = async (method: any, idbooking: any) => {
     try {
-      if (method == "paidDeposid") {
-        alert("Xac nhan thanh toan hoa don");
-      } else if (method == "confirmpickup") {
-        alert("Xac nhan lay xe");
-      } else if (method == "returncar") {
-        alert("Xac nhan tra xe");
-      }
       const response = await fetch(
         `http://localhost:8080/${method}/${idbooking}`,
         {
@@ -42,58 +36,29 @@ const BookingCard = ({ booking, car }: any) => {
           },
         }
       );
+
       if (!response.ok) {
         response.json().then((data) => alert(data.message));
       }
       const data = await response.json();
       return data;
     } catch (error) {
-      console.error("Error fetching car:", error);
-    }
-  };
-
-  const BankTransfer = async (idbooking: any) => {
-    try {
-      const response = await fetch(
-        `http://localhost:8080/createbanktransfer/${idbooking}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-      const res = await response
-        .json()
-        .then((data) => (location.href = data.result));
-    } catch (error) {
-      console.error("Error fetching car:", error);
+      console.error("Error processing request:", error);
     }
   };
 
   const handleClick = () => {
-    if (
-      booking.paymentmethod == "Bank transfer" &&
-      booking.status == "Pending Deposit"
-    ) {
-      BankTransfer(booking.idbooking);
-      location.href = "/customer";
-    } else {
-      bookingMethodPost(listMethod[booking.status], booking.idbooking);
-      location.reload();
-    }
-  };
-  const handleBack = () => {
-    location.href = "/customer";
+    bookingMethodPost(listMethod[booking.status], booking.idbooking);
+    router.push("/viewBookingList");
   };
 
-  const handleCancle = () => {
+  const handleBack = () => {
+    router.push("/viewBookingList");
+  };
+
+  const handleCancel = () => {
     bookingMethodPost("cancelbooking", booking.idbooking);
-    location.reload();
+    router.push("/viewBookingList");
   };
 
   const handleReport = () => {
@@ -105,102 +70,123 @@ const BookingCard = ({ booking, car }: any) => {
   };
 
   useEffect(() => {}, [booking]);
-  console.log(booking.status);
-  return (
-    <div className="container d-flex pt-4 border-0 m-0">
-      <div className="row d-flex align-items-center">
-        <div className="col-5">
-          {car && <img src={car.images} alt="" style={{ width: "100%" }} />}
-        </div>
-        {car && booking && (
-          <div className="col-6">
-            <div className="row">
-              <div className="col-6">
-                <p>Name: {car.name}</p>
-                <p>Brand: {car.brand}</p>
-                <p>Color: {car.color}</p>
-                <p>Deposite: {car.deposite}</p>
-                <p>
-                  Status:
-                  <span className="text-success">{status[booking.status]}</span>
-                </p>
-              </div>
-              <div className="col-6">
-                <p>Payment Method: {booking.paymentmethod}</p>
-                <p>Start: {booking.startdatetime}</p>
-                <p>End: {booking.enddatetime}</p>
-              </div>
-            </div>
 
-            <div className="row d-flex justify-content-around">
-              {listMethod[booking.status] == "paidDeposid" && (
-                <>
-                  <button
-                    className="col-5 btn btn-secondary"
-                    onClick={handleBack}
-                  >
-                    Back
+  const formattedStartDateTime = new Date(booking.startdatetime).toLocaleString(
+    "en-EN",
+    {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    }
+  );
+
+  const formattedEndDateTime = new Date(booking.enddatetime).toLocaleString(
+    "en-EN",
+    {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    }
+  );
+
+  return (
+    <div className="container mt-4">
+      <div className="card shadow-lg p-3">
+        <div className="row g-0">
+          {/* Hình ảnh xe */}
+          <div className="col-md-4 d-flex align-items-center justify-content-center">
+            {car && (
+              <img
+                src={car.images}
+                alt={car.name}
+                className="img-fluid rounded"
+                style={{ maxWidth: "100%", height: "250px", objectFit: "cover" }}
+              />
+            )}
+          </div>
+
+          {/* Thông tin booking */}
+          <div className="col-md-8">
+            <div className="card-body">
+              <h5 className="card-title text-primary">{car.name}</h5>
+              <p className="card-text">
+                <strong>Brand:</strong> {car.brand}
+              </p>
+              <p className="card-text">
+                <strong>Color:</strong> {car.color}
+              </p>
+              <p className="card-text">
+                <strong>Deposite:</strong> {car.deposite}
+              </p>
+              <p className="card-text">
+                <strong>Status:</strong>{" "}
+                <span className="text-success">{status[booking.status]}</span>
+              </p>
+
+              <h5 className="mt-3">Booking Details</h5>
+              <p className="card-text">
+                <strong>Payment Method:</strong> {booking.paymentmethod}
+              </p>
+              <p className="card-text">
+                <strong>Start:</strong> {formattedStartDateTime}
+              </p>
+              <p className="card-text">
+                <strong>End:</strong> {formattedEndDateTime}
+              </p>
+
+              {/* Nút hành động */}
+              <div className="d-flex flex-wrap gap-2 mt-3">
+                <button className="btn btn-secondary flex-grow-1" onClick={handleBack}>
+                  Back
+                </button>
+
+                {listMethod[booking.status] === "paidDeposid" && (
+                  <button className="btn btn-primary flex-grow-1" onClick={handleClick}>
+                    Confirm Deposit Payment
                   </button>
-                  <button
-                    className="col-5 btn btn-primary"
-                    onClick={handleClick}
-                  >
-                    Xac nhan tra tien
+                )}
+                {listMethod[booking.status] === "returncar" && (
+                  <button className="btn btn-primary flex-grow-1" onClick={handleClick}>
+                    Confirm Return Car
                   </button>
-                </>
-              )}
-              {listMethod[booking.status] == "returncar" && (
-                <>
-                  <button
-                    className="col-5 btn btn-secondary"
-                    onClick={handleBack}
-                  >
-                    Back
-                  </button>
-                  <button
-                    className="col-5 btn btn-primary"
-                    onClick={handleClick}
-                  >
-                    Xac nhan tra xe
-                  </button>
-                </>
-              )}
-              {booking.status == "Confirmed" && (
-                <div className="row d-flex justify-content-between">
-                  <button
-                    className="col-3 btn btn-secondary"
-                    onClick={handleBack}
-                  >
-                    Back
-                  </button>
-                  <button
-                    className="col-3 btn btn-primary"
-                    onClick={handleClick}
-                  >
-                    Lay xe
-                  </button>
-                  <button
-                    className="col-3 btn btn-danger"
-                    onClick={handleCancle}
-                  >
-                    Huy
-                  </button>
-                </div>
-              )}
-              {status[booking.status] == "Completed" && (
-                <div className="row d-flex justify-content-between">
-                  <button
-                    className="col-5 btn btn-danger"
-                    onClick={handleReport}
-                  >
+                )}
+
+                {booking.status === "Confirmed" && (
+                  <>
+                    <button className="btn btn-success flex-grow-1" onClick={handleClick}>
+                      Pick up Car
+                    </button>
+                    <button className="btn btn-danger flex-grow-1" onClick={handleCancel}>
+                      Cancel
+                    </button>
+                  </>
+                )}
+
+                {status[booking.status] === "Completed" && (
+                  <button className="btn btn-warning flex-grow-1" onClick={handleReport}>
                     Report
                   </button>
-                  {showModal && <RatingModal onClose={handleClose} bookingid={booking.idbooking} />}
-                </div>
+                )}
+              </div>
+
+              {/* Hiển thị modal đánh giá nếu showModal = true */}
+              {showModal && (
+                <RatingModal
+                  onClose={handleClose}
+                  bookingid={booking.idbooking}
+                />
               )}
             </div>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

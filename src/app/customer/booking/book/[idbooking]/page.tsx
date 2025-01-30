@@ -3,7 +3,7 @@
 import { Fragment, useEffect, useState, useRef } from "react";
 import { useRouter, useSearchParams, useParams } from "next/navigation";
 import React from "react";
-import BookingItem from "@/components/BookingItem";
+import Footer from "@/components/Footerowner";
 import BookingCard from "@/components/BookingCard";
 import Navbar from "@/components/Navbarowner";
 import { getUser } from "@/components/UserInfo";
@@ -13,6 +13,7 @@ const Booking = () => {
   const [car, setCar] = useState(null);
   const [booking, setBooking] = useState(null);
   const [user, setUser] = useState(null);
+
   const fetchBooking = async (idbooking) => {
     try {
       const response = await fetch(
@@ -49,29 +50,32 @@ const Booking = () => {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
-      setCar(data?.result);
+      return data;
     } catch (error) {
       console.error("Error fetching car:", error);
+      return null;
     }
   };
 
   useEffect(() => {
     const fetchData = async () => {
       const bookingData = await fetchBooking(idbooking);
-      console.log(bookingData);
+      const carData = await fetchCar(bookingData.result.result.carIdcar);
       if (bookingData) {
         setBooking(bookingData.result.result);
+        setCar(carData.result);
       }
     };
 
     fetchData();
   }, [idbooking]);
 
-  useEffect(() => {
-    if (booking?.carIdcar) {
-      fetchCar(booking.carIdcar);
-    }
-  }, [booking]);
+  // useEffect(() => {
+  //   if (booking?.carIdcar) {
+  //     fetchCar(booking.carIdcar);
+  //   }
+  // }, [booking]);
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
@@ -87,11 +91,20 @@ const Booking = () => {
 
   return (
     <>
-    {user && <Navbar name={user.result.name} role={user.result.role} />}
-    <div className="container d-flex align-items-center justify-content-center flex-column border-0" style={{height: '100vh'}}>
-      <h2>Thông tin hóa đơn</h2>
-      {booking && <BookingCard booking={booking} car={car} />}
+      {/* Navbar */}
+      {user && <Navbar name={user.result.name} role={user.result.role} />}
+
+      {/* Main Content */}
+      <div
+        className="container-fluid d-flex flex-column"
+        style={{ minHeight: "100vh" }}
+      >
+        <div className="mt-5 mb-5 pt-4 flex-grow-1 d-flex align-items-center justify-content-center flex-column">
+          <h2>Booking information</h2>
+          {booking && <BookingCard booking={booking} car={car} />}
+        </div>
       </div>
+      <Footer></Footer>
     </>
   );
 };
